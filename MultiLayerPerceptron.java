@@ -53,9 +53,19 @@ public class MultiLayerPerceptron {
     }
 
     public double[] runLayer(double[] inputs, int layer) {
+        if (layer == 0) return inputs;
+
         double[] output = new double[perceptrons.get(layer).size()];
+        // calculate output for each perceptron of a layer
         for (int i = 0; i < output.length; i++) {
-            output[i] = 5;
+            float sum = 0;
+            double[] w = weights.get(layer-1).get(i);
+            // calculate weight sum of inputs for each perceptron
+            for (int j = 0; j < w.length; j++) {
+                sum += inputs[j] * w[j];
+            }
+            // calcuate output through activation function
+            output[i] = perceptrons.get(layer).get(i).activate(sum);
         }
         return output;
     }
