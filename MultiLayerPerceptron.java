@@ -15,17 +15,6 @@ public class MultiLayerPerceptron {
         biases = new ArrayList<List<Double>>(numLayers);
         
         Random rand = new Random();
-        
-        // init input layer
-        // biases.add(0, new ArrayList<Double>(inputSize));
-        // for (int i = 0; i < inputSize; i++) {
-        //     double b = 0;
-        //     if (randomizeBiases) {
-        //         b = (rand.nextDouble()-0.5)*10;
-        //     }
-        //     biases.get(0).add(i, b);
-        // }
-
 
         // init hidden layers
         for (int i = 0; i < numHiddenLayers; i++) {
