@@ -6,8 +6,10 @@ public class MultiLayerPerceptron {
     public int numLayers;
     public List<List<double[]>> weights;
     public List<List<Double>> biases;
+    public Utils.ActivationFunction af;
     
-    public MultiLayerPerceptron(int inputSize, int numHiddenLayers, int hiddenLayerSize, int outputSize, boolean randomizeWeights, boolean randomizeBiases) {
+    public MultiLayerPerceptron(int inputSize, int numHiddenLayers, int hiddenLayerSize, int outputSize, boolean randomizeWeights, boolean randomizeBiases, Utils.ActivationFunction af) {
+        this.af = af;
         numLayers = numHiddenLayers + 1;
         weights = new ArrayList<List<double[]>>(numLayers);
         biases = new ArrayList<List<Double>>(numLayers);
@@ -90,9 +92,17 @@ public class MultiLayerPerceptron {
                 sum += inputs[j] * w[j];
             }
             // calcuate output through activation function
-            output[i] = Utils.sigmoid(biases.get(layer).get(i) + sum);
+            output[i] = evaluate(biases.get(layer).get(i) + sum);
         }
         return output;
+    }
+
+    public double evaluate(double x) {
+        switch (af) {
+            case SIGMOID: return Utils.sigmoid(x);
+            case RELU: return Utils.ReLU(x);
+            default: return Utils.sigmoid(x);
+        }
     }
 
     public String printBiases() {
