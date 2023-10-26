@@ -1,20 +1,27 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MultiLayerPerceptron {
     public int numLayers;
     public List<List<double[]>> weights;
     public List<List<Double>> biases;
     
-    public MultiLayerPerceptron(int inputSize, int numHiddenLayers, int hiddenLayerSize, int outputSize) {
+    public MultiLayerPerceptron(int inputSize, int numHiddenLayers, int hiddenLayerSize, int outputSize, boolean randomizeWeights, boolean randomizeBiases) {
         numLayers = numHiddenLayers + 2;
         weights = new ArrayList<List<double[]>>(numLayers-1);
         biases = new ArrayList<List<Double>>(numLayers);
         
+        Random rand = new Random();
+        
         // init input layer
         biases.add(0, new ArrayList<Double>(inputSize));
         for (int i = 0; i < inputSize; i++) {
-            biases.get(0).add(i, 0.0);
+            double b = 0;
+            if (randomizeBiases) {
+                b = (rand.nextDouble()-0.5)*10;
+            }
+            biases.get(0).add(i, b);
         }
 
 
@@ -23,11 +30,19 @@ public class MultiLayerPerceptron {
             biases.add(i, new ArrayList<Double>(hiddenLayerSize));
             weights.add(i-1, new ArrayList<double[]>(hiddenLayerSize));
             for (int j = 0; j < hiddenLayerSize; j++) {
-                biases.get(i).add(j, 0.0);
+                double b = 0;
+                if (randomizeBiases) {
+                    b = (rand.nextDouble()-0.5)*10;
+                }
+                biases.get(i).add(j, b);
                 weights.get(i-1).add(j, new double[biases.get(i-1).size()]);
                 double[] w = weights.get(i-1).get(j);
                 for (int k = 0; k < w.length; k++) {
-                    w[k] = 1;
+                    double r = 1;
+                    if (randomizeWeights) {
+                        r = (rand.nextDouble()-0.5) * 2 * 10;
+                    }
+                    w[k] = r;
                 }
             }
         }
@@ -36,11 +51,19 @@ public class MultiLayerPerceptron {
         biases.add(numLayers-1, new ArrayList<Double>(outputSize));
         weights.add(numLayers-2, new ArrayList<double[]>(outputSize));
         for (int i = 0; i < outputSize; i++) {
-            biases.get(numLayers-1).add(i, 0.0);
+            double b = 0;
+            if (randomizeBiases) {
+                b = (rand.nextDouble()-0.5)*10;
+            }
+            biases.get(numLayers-1).add(i, b);
             weights.get(numLayers-2).add(i, new double[biases.get(numLayers-2).size()]);
             double[] w = weights.get(numLayers-2).get(i);
             for (int j = 0; j < w.length; j++) {
-                w[j] = 1;
+                double r = 1;
+                if (randomizeWeights) {
+                    r = (rand.nextDouble()-0.5) * 2 * 10;
+                }
+                w[j] = r;
             }
         }
     }

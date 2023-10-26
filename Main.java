@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        MultiLayerPerceptron mlp = new MultiLayerPerceptron(5, 2, 5, 5);
+        MultiLayerPerceptron mlp = new MultiLayerPerceptron(5, 2, 5, 5, true, true);
         System.out.println(mlp.printBiases());
         System.out.println(mlp.printWeights());
 
