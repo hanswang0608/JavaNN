@@ -3,27 +3,28 @@ import java.util.List;
 
 public class MultiLayerPerceptron {
     public int numLayers;
-    public List<List<Perceptron>> perceptrons;
     public List<List<double[]>> weights;
+    public List<List<Double>> biases;
     
     public MultiLayerPerceptron(int inputSize, int numHiddenLayers, int hiddenLayerSize, int outputSize) {
         numLayers = numHiddenLayers + 2;
-        perceptrons = new ArrayList<List<Perceptron>>(numLayers);
         weights = new ArrayList<List<double[]>>(numLayers-1);
+        biases = new ArrayList<List<Double>>(numLayers);
         
         // init input layer
-        perceptrons.add(0, new ArrayList<Perceptron>(inputSize));
+        biases.add(0, new ArrayList<Double>(inputSize));
         for (int i = 0; i < inputSize; i++) {
-            perceptrons.get(0).add(i, new Perceptron());
+            biases.get(0).add(i, 0.0);
         }
+
 
         // init hidden layers
         for (int i = 1; i < numHiddenLayers+1; i++) {
-            perceptrons.add(i, new ArrayList<Perceptron>(hiddenLayerSize));
+            biases.add(i, new ArrayList<Double>(hiddenLayerSize));
             weights.add(i-1, new ArrayList<double[]>(hiddenLayerSize));
             for (int j = 0; j < hiddenLayerSize; j++) {
-                perceptrons.get(i).add(j, new Perceptron());
-                weights.get(i-1).add(j, new double[perceptrons.get(i-1).size()]);
+                biases.get(i).add(j, 0.0);
+                weights.get(i-1).add(j, new double[biases.get(i-1).size()]);
                 double[] w = weights.get(i-1).get(j);
                 for (int k = 0; k < w.length; k++) {
                     w[k] = 1;
@@ -32,11 +33,11 @@ public class MultiLayerPerceptron {
         }
 
         // init output layer
-        perceptrons.add(numLayers-1, new ArrayList<Perceptron>(outputSize));
+        biases.add(numLayers-1, new ArrayList<Double>(outputSize));
         weights.add(numLayers-2, new ArrayList<double[]>(outputSize));
         for (int i = 0; i < outputSize; i++) {
-            perceptrons.get(numLayers-1).add(i, new Perceptron());
-            weights.get(numLayers-2).add(i, new double[perceptrons.get(numLayers-2).size()]);
+            biases.get(numLayers-1).add(i, 0.0);
+            weights.get(numLayers-2).add(i, new double[biases.get(numLayers-2).size()]);
             double[] w = weights.get(numLayers-2).get(i);
             for (int j = 0; j < w.length; j++) {
                 w[j] = 1;
@@ -46,7 +47,7 @@ public class MultiLayerPerceptron {
 
     public double[] run(double[] inputs) {
         double[] nextInputs = inputs.clone();
-        for (int i = 0; i < perceptrons.size(); i++) {
+        for (int i = 0; i < biases.size(); i++) {
             nextInputs = runLayer(nextInputs, i);
         }
         return nextInputs;
@@ -55,7 +56,7 @@ public class MultiLayerPerceptron {
     public double[] runLayer(double[] inputs, int layer) {
         if (layer == 0) return inputs;
 
-        double[] output = new double[perceptrons.get(layer).size()];
+        double[] output = new double[biases.get(layer).size()];
         // calculate output for each perceptron of a layer
         for (int i = 0; i < output.length; i++) {
             float sum = 0;
@@ -65,17 +66,17 @@ public class MultiLayerPerceptron {
                 sum += inputs[j] * w[j];
             }
             // calcuate output through activation function
-            output[i] = perceptrons.get(layer).get(i).activate(sum);
+            output[i] = Utils.sigmoid(biases.get(layer).get(i) + sum);
         }
         return output;
     }
 
     public String printBiases() {
         String output = "";
-        for (int i = 0; i < perceptrons.size(); i++) {
-            List<Perceptron> layer = perceptrons.get(i);
+        for (int i = 0; i < biases.size(); i++) {
+            List<Double> layer = biases.get(i);
             for (int j = 0; j < layer.size(); j++) {
-                output += layer.get(j).bias + " ";
+                output += layer.get(j) + " ";
             }
             output += "\n";
         }
