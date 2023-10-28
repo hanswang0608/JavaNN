@@ -6,19 +6,19 @@ public class Layer {
     private ArrayList<Double> values;
     private ActivationFunction func;
 
-    public Layer(int size, int numWeights, ActivationFunction func) {
-        this.biases = new ArrayList<Double>(size);
-        this.values= new ArrayList<Double>(size);
-        this.weights = new ArrayList<ArrayList<Double>>(size);
+    public Layer(int numNeurons, int numWeights, ActivationFunction func) {
+        this.biases = new ArrayList<Double>(numNeurons);
+        this.values= new ArrayList<Double>(numNeurons);
+        this.weights = new ArrayList<ArrayList<Double>>(numNeurons);
         this.func = func;
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < numNeurons; i++) {
             this.biases.add(i, 0.0);
         }
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < numNeurons; i++) {
             this.values.add(i, 0.0);
         }
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < numNeurons; i++) {
             this.weights.add(i, new ArrayList<Double>(numWeights));
             for (int j = 0; j < numWeights; j++) {
                 this.weights.get(i).add(j, 0.0);
@@ -26,83 +26,22 @@ public class Layer {
         }
     }
 
-    public Layer(int size, int numWeights, double[] biases, double[][] weights, ActivationFunction func) {
-        this.biases = new ArrayList<Double>(size);
-        this.values= new ArrayList<Double>(size);
-        this.weights = new ArrayList<ArrayList<Double>>(size);
+    public Layer(int numNeurons, int numWeights, double[] biases, double[][] weights, ActivationFunction func) {
+        this.biases = new ArrayList<Double>(numNeurons);
+        this.values= new ArrayList<Double>(numNeurons);
+        this.weights = new ArrayList<ArrayList<Double>>(numNeurons);
         this.func = func;
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < numNeurons; i++) {
             this.biases.add(i, biases[i]);
         }
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < numNeurons; i++) {
             this.values.add(i, 0.0);
         }
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < numNeurons; i++) {
             this.weights.add(i, new ArrayList<Double>(numWeights));
             for (int j = 0; j < numWeights; j++) {
                 this.weights.get(i).add(j, weights[i][j]);
-            }
-        }
-    }
-
-    public int getSize() {
-        return this.biases.size();
-    }
-
-    public int getNumWeights() {
-        return this.weights.get(0).size();
-    }
-
-    public double[] getBiases() {
-        int numNeurons = getSize();
-        double[] ret = new double[numNeurons];
-        for (int i = 0; i < numNeurons; i++) {
-            ret[i] = this.biases.get(i).doubleValue();
-        }
-        return ret;
-    }
-
-    public void setBiases(double[] biases) {
-        int numNeurons = getSize();
-        if (biases.length != numNeurons) {
-            throw new IllegalArgumentException("Dimension of arg is different than biases");
-        }
-        for (int i = 0; i < numNeurons; i++) {
-            this.biases.set(i, biases[i]);
-        }
-    }
-
-    public double[] getValues() {
-        int numNeurons = getSize();
-        double[] ret = new double[numNeurons];
-        for (int i = 0; i < numNeurons; i++) {
-            ret[i] = this.values.get(i).doubleValue();
-        }
-        return ret;
-    }
-
-    public double[][] getWeights() {
-        int numNeurons = getSize();
-        int numWeights = getNumWeights();
-        double[][] ret = new double[numNeurons][numWeights];
-        for (int i = 0; i < numNeurons; i++) {
-            for (int j = 0; j < numWeights; j++) {
-                ret[i][j] = this.weights.get(i).get(j).doubleValue();
-            }
-        }
-        return ret;
-    }
-
-    public void setWeights(double[][] weights) {
-        int numNeurons = getSize();
-        int numWeights = getNumWeights();
-        if (weights.length != numNeurons || weights[0].length != numWeights) {
-            throw new IllegalArgumentException("Dimension of arg is different than weights");
-        }
-        for (int i = 0; i < numNeurons; i++) {
-            for (int j = 0; j < numWeights; j++) {
-                this.weights.get(i).set(j, weights[i][j]);
             }
         }
     }
@@ -116,7 +55,7 @@ public class Layer {
     }
 
     public double[] evaluate(double[] inputs) {
-        double[] output = new double[getSize()];
+        double[] output = new double[getNumNeurons()];
         int numWeights = getNumWeights();
         for (int i = 0; i < output.length; i++) {
             double sum = 0;
@@ -129,8 +68,87 @@ public class Layer {
         return output;
     }
 
+    public int getNumNeurons() {
+        return this.biases.size();
+    }
+
+    public int getNumWeights() {
+        return this.weights.get(0).size();
+    }
+
+    public double[] getBiases() {
+        int numNeurons = getNumNeurons();
+        double[] ret = new double[numNeurons];
+        for (int i = 0; i < numNeurons; i++) {
+            ret[i] = this.biases.get(i).doubleValue();
+        }
+        return ret;
+    }
+
+    public void setBiases(double[] biases) {
+        int numNeurons = getNumNeurons();
+        if (biases.length != numNeurons) {
+            throw new IllegalArgumentException("Dimension of arg is different than biases");
+        }
+        for (int i = 0; i < numNeurons; i++) {
+            this.biases.set(i, biases[i]);
+        }
+    }
+
+    public double[] getValues() {
+        int numNeurons = getNumNeurons();
+        double[] ret = new double[numNeurons];
+        for (int i = 0; i < numNeurons; i++) {
+            ret[i] = this.values.get(i).doubleValue();
+        }
+        return ret;
+    }
+
+    public void setValues(double[] values) {
+        int numNeurons = getNumNeurons();
+        if (values.length != numNeurons) {
+            throw new IllegalArgumentException("Dimension of arg is different than values");
+        }
+        for (int i = 0; i < numNeurons; i++) {
+            this.values.set(i, values[i]);
+        }
+    }
+
+    public double[][] getWeights() {
+        int numNeurons = getNumNeurons();
+        int numWeights = getNumWeights();
+        double[][] ret = new double[numNeurons][numWeights];
+        for (int i = 0; i < numNeurons; i++) {
+            for (int j = 0; j < numWeights; j++) {
+                ret[i][j] = this.weights.get(i).get(j).doubleValue();
+            }
+        }
+        return ret;
+    }
+
+    public void setWeights(double[][] weights) {
+        int numNeurons = getNumNeurons();
+        int numWeights = getNumWeights();
+        if (weights.length != numNeurons || weights[0].length != numWeights) {
+            throw new IllegalArgumentException("Dimension of arg is different than weights");
+        }
+        for (int i = 0; i < numNeurons; i++) {
+            for (int j = 0; j < numWeights; j++) {
+                this.weights.get(i).set(j, weights[i][j]);
+            }
+        }
+    }
+
+    public Layer.ActivationFunction getActivationFunction() {
+        return this.func;
+    }
+
+    public void setActivationFunction(Layer.ActivationFunction func) {
+        this.func = func;
+    }
+
     public void printValues() {
-        int numNeurons = getSize();
+        int numNeurons = getNumNeurons();
         String s = "";
         for (int i = 0; i < numNeurons; i++) {
             s += this.values.get(i).toString() + ' ';
@@ -149,7 +167,7 @@ public class Layer {
         double[] inputs = new double[]{5, 10};
         w[0] = new double[]{3.0, 4.0}; 
         w[1] = new double[]{5.0, 6.0}; 
-        Layer l = new Layer(2, 2, b, w, Layer.ActivationFunction.SIGMOID);
+        Layer l = new Layer(2, 2, b, w, Layer.ActivationFunction.RELU);
         b = l.getBiases();
         for (int i = 0; i < b.length; i++) {
             System.out.println(b[i]);
