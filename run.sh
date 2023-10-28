@@ -1,4 +1,6 @@
 ./build.sh
 
 echo "--- Running"
-java -cp build Main
+
+PROGRAM=${1:-"Main"}
+java -cp build $PROGRAM
