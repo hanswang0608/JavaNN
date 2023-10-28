@@ -66,7 +66,7 @@ public class Layer {
     public void setBiases(double[] biases) {
         int numNeurons = getSize();
         if (biases.length != numNeurons) {
-            throw new IllegalArgumentException("Size of arg is different than biases");
+            throw new IllegalArgumentException("Dimension of arg is different than biases");
         }
         for (int i = 0; i < numNeurons; i++) {
             this.biases.set(i, biases[i]);
@@ -98,7 +98,7 @@ public class Layer {
         int numNeurons = getSize();
         int numWeights = getNumWeights();
         if (weights.length != numNeurons || weights[0].length != numWeights) {
-            throw new IllegalArgumentException("Size of arg is different than weights");
+            throw new IllegalArgumentException("Dimension of arg is different than weights");
         }
         for (int i = 0; i < numNeurons; i++) {
             for (int j = 0; j < numWeights; j++) {

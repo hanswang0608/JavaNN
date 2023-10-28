@@ -15,4 +15,21 @@ public class NeuralNetwork {
             this.layers.add(i-1, new Layer(architecture[i], architecture[i-1], layerType));
         }
     }
+
+    public double[] evaluate(double[] inputs) {
+        if (inputs.length != architecture[0]) {
+            throw new IllegalArgumentException("Dimension of inputs does not match the input layer");
+        }
+        double[] outputs = inputs;
+        for (int i = 0; i < layers.size(); i++) {
+            outputs = layers.get(i).evaluate(outputs);
+        }
+        return outputs;
+    }
+
+    public static void main(String[] args) {
+        NeuralNetwork network = new NeuralNetwork(new int[]{2, 2, 2});
+        network.evaluate(new double[]{1.0, 2.0});
+    }
 }
+ 
