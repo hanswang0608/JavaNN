@@ -29,14 +29,14 @@ public class NeuralNetwork {
 
     public void randomizeBiases() {
         int numLayers = getNumLayers();
-        for (int i = 0; i < numLayers; i++) {
+        for (int i = 1; i < numLayers; i++) {
             this.layers.get(i).randomizeBiases();
         }
     }
 
     public void randomizeWeights() {
         int numLayers = getNumLayers();
-        for (int i = 0; i < numLayers; i++) {
+        for (int i = 1; i < numLayers; i++) {
             this.layers.get(i).randomizeWeights();
         }
     }
