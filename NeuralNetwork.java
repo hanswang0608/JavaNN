@@ -15,10 +15,6 @@ public class NeuralNetwork {
         }
     }
 
-    public int getNumLayers() {
-        return this.layers.size();
-    }
-
     public double[] evaluate(double[] inputs) {
         if (inputs.length != layers.get(0).getNumNeurons()) {
             throw new IllegalArgumentException("Dimension of inputs does not match the input layer");
@@ -29,6 +25,20 @@ public class NeuralNetwork {
             outputs = layers.get(i).evaluate(outputs);
         }
         return outputs;
+    }
+
+    public void randomizeBiases() {
+        int numLayers = getNumLayers();
+        for (int i = 0; i < numLayers; i++) {
+            this.layers.get(i).randomizeBiases();
+        }
+    }
+
+    public void randomizeWeights() {
+        int numLayers = getNumLayers();
+        for (int i = 0; i < numLayers; i++) {
+            this.layers.get(i).randomizeWeights();
+        }
     }
 
     public void printNetworkAttr() {
@@ -54,6 +64,10 @@ public class NeuralNetwork {
         }
     }
 
+    public int getNumLayers() {
+        return this.layers.size();
+    }
+
     public static void main(String[] args) {
         NeuralNetwork network = new NeuralNetwork(new int[]{2, 2, 2});
         double[] outputs = network.evaluate(new double[]{0.5, 0.5});
@@ -61,4 +75,3 @@ public class NeuralNetwork {
         network.printNetworkValues();
     }
 }
- 

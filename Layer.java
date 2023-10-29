@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Layer {
     private ArrayList<Double> biases;
@@ -58,6 +59,27 @@ public class Layer {
             this.values.set(i, output[i]);
         }
         return output;
+    }
+
+    public void randomizeBiases() {
+        int numNeurons = getNumNeurons();
+        Random rand = new Random();
+        for (int i = 0; i < numNeurons; i++) {
+            // randomize bias between [-5, 5]
+            this.biases.set(i, (rand.nextDouble()-0.5)*2*5);
+        }
+    }
+
+    public void randomizeWeights() {
+        int numNeurons = getNumNeurons();
+        int numWeights = getNumWeights();
+        Random rand = new Random();
+        for (int i = 0; i < numNeurons; i++) {
+            for (int j = 0; j < numWeights; j++) {
+                // randomize weight between [-10, 10]
+                this.weights.get(i).set(j, (rand.nextDouble()-0.5)*2*10);
+            }
+        }
     }
 
     public int getNumNeurons() {
