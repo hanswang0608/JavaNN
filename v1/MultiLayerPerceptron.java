@@ -6,9 +6,9 @@ public class MultiLayerPerceptron {
     public int numLayers;
     public List<List<double[]>> weights;
     public List<List<Double>> biases;
-    public Utils.ActivationFunction af;
+    public ActivationFunction.ActivationFunction af;
     
-    public MultiLayerPerceptron(int inputSize, int numHiddenLayers, int hiddenLayerSize, int outputSize, boolean randomizeWeights, boolean randomizeBiases, Utils.ActivationFunction af) {
+    public MultiLayerPerceptron(int inputSize, int numHiddenLayers, int hiddenLayerSize, int outputSize, boolean randomizeWeights, boolean randomizeBiases, ActivationFunction.ActivationFunction af) {
         this.af = af;
         numLayers = numHiddenLayers + 1;
         weights = new ArrayList<List<double[]>>(numLayers);
@@ -88,9 +88,9 @@ public class MultiLayerPerceptron {
 
     public double evaluate(double x) {
         switch (af) {
-            case SIGMOID: return Utils.sigmoid(x);
-            case RELU: return Utils.ReLU(x);
-            default: return Utils.sigmoid(x);
+            case SIGMOID: return ActivationFunction.sigmoid(x);
+            case RELU: return ActivationFunction.ReLU(x);
+            default: return ActivationFunction.sigmoid(x);
         }
     }
 

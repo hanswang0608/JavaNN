@@ -5,7 +5,7 @@ public class Main {
         double[] inputs = new double[]{5, 10};
         w[0] = new double[]{3.0, 4.0}; 
         w[1] = new double[]{5.0, 6.0}; 
-        Layer l = new Layer(2, 2, b, w, Layer.ActivationFunction.SIGMOID);
+        Layer l = new Layer(2, 2, b, w, ActivationFunction.FuncTypes.SIGMOID);
         b = l.getBiases();
         for (int i = 0; i < b.length; i++) {
             System.out.println(b[i]);

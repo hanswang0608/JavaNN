@@ -4,9 +4,9 @@ public class Layer {
     private ArrayList<Double> biases;
     private ArrayList<ArrayList<Double>> weights;
     private ArrayList<Double> values;
-    private ActivationFunction func;
+    private ActivationFunction.FuncTypes func;
 
-    public Layer(int numNeurons, int numWeights, ActivationFunction func) {
+    public Layer(int numNeurons, int numWeights, ActivationFunction.FuncTypes func) {
         this.biases = new ArrayList<Double>(numNeurons);
         this.values= new ArrayList<Double>(numNeurons);
         this.weights = new ArrayList<ArrayList<Double>>(numNeurons);
@@ -26,7 +26,7 @@ public class Layer {
         }
     }
 
-    public Layer(int numNeurons, int numWeights, double[] biases, double[][] weights, ActivationFunction func) {
+    public Layer(int numNeurons, int numWeights, double[] biases, double[][] weights, ActivationFunction.FuncTypes func) {
         this.biases = new ArrayList<Double>(numNeurons);
         this.values= new ArrayList<Double>(numNeurons);
         this.weights = new ArrayList<ArrayList<Double>>(numNeurons);
@@ -46,14 +46,6 @@ public class Layer {
         }
     }
 
-    private double activate(double x) {
-        switch (this.func) {
-            case SIGMOID: return Utils.sigmoid(x);
-            case RELU: return Utils.ReLU(x);
-            default: return Utils.sigmoid(x);
-        }
-    }
-
     public double[] evaluate(double[] inputs) {
         double[] output = new double[getNumNeurons()];
         int numWeights = getNumWeights();
@@ -62,7 +54,7 @@ public class Layer {
             for (int j = 0; j < numWeights; j++) {
                 sum += inputs[j] * this.weights.get(i).get(j);
             }
-            output[i] = activate(sum + this.biases.get(i));
+            output[i] = ActivationFunction.activate(sum + this.biases.get(i), this.func);
             this.values.set(i, output[i]);
         }
         return output;
@@ -139,11 +131,11 @@ public class Layer {
         }
     }
 
-    public Layer.ActivationFunction getActivationFunction() {
+    public ActivationFunction.FuncTypes getActivationFunction() {
         return this.func;
     }
 
-    public void setActivationFunction(Layer.ActivationFunction func) {
+    public void setActivationFunction(ActivationFunction.FuncTypes func) {
         this.func = func;
     }
 
@@ -156,18 +148,13 @@ public class Layer {
         System.out.println(s);
     }
 
-    public enum ActivationFunction {
-        SIGMOID,
-        RELU
-    }
-
     public static void main(String[] args) {
         double[] b = new double[]{1.0, 2.0};
         double[][] w = new double[2][];
         double[] inputs = new double[]{5, 10};
         w[0] = new double[]{3.0, 4.0}; 
         w[1] = new double[]{5.0, 6.0}; 
-        Layer l = new Layer(2, 2, b, w, Layer.ActivationFunction.RELU);
+        Layer l = new Layer(2, 2, b, w, ActivationFunction.FuncTypes.RELU);
         b = l.getBiases();
         for (int i = 0; i < b.length; i++) {
             System.out.println(b[i]);

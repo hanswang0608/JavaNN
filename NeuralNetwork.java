@@ -5,12 +5,12 @@ public class NeuralNetwork {
 
     public NeuralNetwork(int[] architecture) {
         this.layers = new ArrayList<Layer>(architecture.length);
-        this.layers.add(0, new Layer(architecture[0], 0, Layer.ActivationFunction.RELU));
-        Layer.ActivationFunction layerType;
+        this.layers.add(0, new Layer(architecture[0], 0, ActivationFunction.FuncTypes.RELU));
+        ActivationFunction.FuncTypes layerType;
         for (int i = 1; i < architecture.length; i++) {
             layerType = (i == architecture.length - 1) 
-                ? Layer.ActivationFunction.SIGMOID
-                : Layer.ActivationFunction.RELU;
+                ? ActivationFunction.FuncTypes.SIGMOID
+                : ActivationFunction.FuncTypes.RELU;
             this.layers.add(i, new Layer(architecture[i], architecture[i-1], layerType));
         }
     }

@@ -10,6 +10,6 @@ public class Perceptron {
     }
 
     public double activate(double input) {
-        return Utils.sigmoid(input+bias);
+        return ActivationFunction.sigmoid(input+bias);
     }
 }
