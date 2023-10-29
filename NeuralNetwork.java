@@ -91,12 +91,12 @@ public class NeuralNetwork {
 
     public static void main(String[] args) {
         NeuralNetwork network = new NeuralNetwork(new int[]{2, 2, 2});
-        double[] outputs = network.evaluate(new double[]{0.5, 0.5});
         network.randomizeBiases();
         network.randomizeWeights();
+        network.evaluate(new double[]{0.5, 0.5});
         network.printNetworkProperties();
-        network.printNetworkValues();
         network.printNetworkBiases();
         network.printNetworkWeights();
+        network.printNetworkValues();
     }
 }
