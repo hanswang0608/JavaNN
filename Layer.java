@@ -81,6 +81,38 @@ public class Layer {
             }
         }
     }
+    
+    public void printValues() {
+        int numNeurons = getNumNeurons();
+        String s = "";
+        for (int i = 0; i < numNeurons; i++) {
+            s += this.values.get(i).toString() + ' ';
+        }
+        System.out.println(s);
+    }
+
+    public void printBiases() {
+        int numNeurons = getNumNeurons();
+        String s = "";
+        for (int i = 0; i < numNeurons; i++) {
+            s += this.biases.get(i).toString() + ' ';
+        }
+        System.out.println(s);
+    }
+
+    public void printWeights() {
+        int numNeurons = getNumNeurons();
+        int numWeights = getNumWeights();
+        String s = "";
+        for (int i = 0; i < numNeurons; i++) {
+            s += "[";
+            for (int j = 0; j < numWeights; j++) {
+                s += this.weights.get(i).get(j).toString() + ",";
+            }
+            s += "] ";
+        }
+        System.out.println(s);
+    }
 
     public int getNumNeurons() {
         return this.biases.size();
@@ -159,15 +191,6 @@ public class Layer {
 
     public void setActivationFunction(ActivationFunction.FuncTypes func) {
         this.func = func;
-    }
-
-    public void printValues() {
-        int numNeurons = getNumNeurons();
-        String s = "";
-        for (int i = 0; i < numNeurons; i++) {
-            s += this.values.get(i).toString() + ' ';
-        }
-        System.out.println(s);
     }
 
     public static void main(String[] args) {

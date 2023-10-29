@@ -41,9 +41,10 @@ public class NeuralNetwork {
         }
     }
 
-    public void printNetworkAttr() {
+    public void printNetworkProperties() {
+        System.out.println("----------------------------------------");
+        System.out.println("Network Properties:");
         int numLayers = getNumLayers();
-        System.out.println("Network Attributes:");
         System.out.println("Number of layers: " + numLayers);
         for (int i = 0; i < numLayers; i++) {
             Layer l = this.layers.get(i);
@@ -58,9 +59,29 @@ public class NeuralNetwork {
     }
 
     public void printNetworkValues() {
+        System.out.println("----------------------------------------");
+        System.out.println("Network Values:");
         int numLayers = getNumLayers();
         for (int i = 0; i < numLayers; i++){
             this.layers.get(i).printValues();
+        }
+    }
+
+    public void printNetworkBiases() {
+        System.out.println("----------------------------------------");
+        System.out.println("Network Biases:");
+        int numLayers = getNumLayers();
+        for (int i = 0; i < numLayers; i++){
+            this.layers.get(i).printBiases();
+        }
+    }
+
+    public void printNetworkWeights() {
+        System.out.println("----------------------------------------");
+        System.out.println("Network Weights:");
+        int numLayers = getNumLayers();
+        for (int i = 0; i < numLayers; i++){
+            this.layers.get(i).printWeights();
         }
     }
 
@@ -71,7 +92,11 @@ public class NeuralNetwork {
     public static void main(String[] args) {
         NeuralNetwork network = new NeuralNetwork(new int[]{2, 2, 2});
         double[] outputs = network.evaluate(new double[]{0.5, 0.5});
-        network.printNetworkAttr();
+        network.randomizeBiases();
+        network.randomizeWeights();
+        network.printNetworkProperties();
         network.printNetworkValues();
+        network.printNetworkBiases();
+        network.printNetworkWeights();
     }
 }
