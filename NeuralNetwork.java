@@ -89,6 +89,27 @@ public class NeuralNetwork {
         return this.layers.size();
     }
 
+    public int[] getArchitecture() {
+        int numLayers = getNumLayers();
+        int[] architecture = new int[numLayers];
+        for (int i = 0; i < numLayers; i++) {
+            architecture[i] = this.layers.get(i).getNumNeurons();
+        }
+        return architecture;
+    }
+
+    // returns the total number of biases and weights in this network
+    public int getNumParameters() {
+        int numLayers = getNumLayers();
+        int numParams = 0;
+        for (int i = 1; i < numLayers; i++) {
+            int numNeurons = this.layers.get(i).getNumNeurons();
+            int numWeights = this.layers.get(i).getNumWeights();
+            numParams += numNeurons + numNeurons*numWeights;
+        }
+        return numParams;
+    }
+
     public static void main(String[] args) {
         NeuralNetwork network = new NeuralNetwork(new int[]{2, 2, 2});
         network.randomizeBiases();

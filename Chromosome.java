@@ -1,6 +1,6 @@
 public class Chromosome {
     
-    public Chromosome() {
-
+    public Chromosome(int[] networkArchitecture) {
+        
     }
 }
