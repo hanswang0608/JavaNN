@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NeuralNetwork {
     private ArrayList<Layer> layers;
@@ -39,6 +40,131 @@ public class NeuralNetwork {
         for (int i = 1; i < numLayers; i++) {
             this.layers.get(i).randomizeWeights();
         }
+    }
+
+    public int getNumLayers() {
+        return this.layers.size();
+    }
+
+    public int getNumBiases() {
+        int numBiases = 0;
+        int numLayers = getNumLayers();
+        for (int i = 1; i < numLayers; i++) {
+            numBiases += this.layers.get(i).getNumNeurons();
+        }
+        return numBiases;
+    }
+
+    // returns biases excluding input layer
+    public double[][] getBiases() {
+        int numLayers = getNumLayers();
+        double[][] biases = new double[numLayers-1][];
+        for (int i = 1; i < numLayers; i++) {
+            biases[i-1] = this.layers.get(i).getBiases();
+        }
+        return biases;
+    }
+
+    
+    public double[][] getBiasesFromChromosome(Chromosome chromosome) {
+        double[] genes = chromosome.getGenes();
+        int numLayers = getNumLayers();
+        double[][] biases = new double[numLayers-1][];
+        int ind = 0;
+        for (int i = 0; i < numLayers-1; i++) {
+            int numNeurons = this.layers.get(i+1).getNumNeurons();
+            biases[i] = new double[numNeurons];
+            for (int j = 0; j < numNeurons; j++) {
+                biases[i][j] = genes[ind];
+                ind++;
+            }
+        }
+        return biases;
+    }
+
+    public int getNumWeights() {
+        int numWeights = 0;
+        int numLayers = getNumLayers();
+        for (int i = 1; i < numLayers; i++) {
+            numWeights += this.layers.get(i).getNumNeurons() * this.layers.get(i).getNumWeights();
+        }
+        return numWeights;
+    }
+
+    public double[][][] getWeightsFromChromosome(Chromosome chromosome) {
+        double[] genes = chromosome.getGenes();
+        int numLayers = getNumLayers();
+        double[][][] weights = new double[numLayers-1][][];
+        int ind = getNumBiases();
+        for (int i = 0; i < numLayers-1; i++) {
+            int numNeurons = this.layers.get(i+1).getNumNeurons();
+            int numWeights = this.layers.get(i+1).getNumWeights();
+            weights[i] = new double[numNeurons][numWeights];
+            for (int j = 0; j < numNeurons; j++) {
+                for (int k = 0; k < numWeights; k++) {
+                    weights[i][j][k] = genes[ind];
+                    ind++;
+                }
+            }
+        }
+        return weights;
+    }
+
+    // sets biases excluding input layer
+    public void setBiases(double[][] biases) {
+        if (biases.length != getNumLayers()-1) {
+            throw new IllegalArgumentException("Dimension of arg is different than num of layers");
+        }
+        for (int i = 0; i < biases.length; i++) {
+            this.layers.get(i+1).setBiases(biases[i]);
+        }
+    }
+
+    // returns weights excluding input layer
+    public double[][][] getWeights() {
+        int numLayers = getNumLayers();
+        double[][][] weights = new double[numLayers-1][][];
+        for (int i = 1; i < numLayers; i++) {
+            weights[i-1] = this.layers.get(i).getWeights();
+        }
+        return weights;
+    }
+
+    // sets weights excluding input layer
+    public void setWeights(double[][][] weights) {
+        if (weights.length != getNumLayers()-1) {
+            throw new IllegalArgumentException("Dimension of arg is different than num of layers");
+        }
+        for (int i = 0; i < weights.length; i++) {
+            this.layers.get(i+1).setWeights(weights[i]);
+        }
+    }
+
+
+    public int[] getArchitecture() {
+        int numLayers = getNumLayers();
+        int[] architecture = new int[numLayers];
+        for (int i = 0; i < numLayers; i++) {
+            architecture[i] = this.layers.get(i).getNumNeurons();
+        }
+        return architecture;
+    }
+
+    // returns the total number of biases and weights in this network
+    public int getNumParameters() {
+        int numLayers = getNumLayers();
+        int numParams = 0;
+        for (int i = 1; i < numLayers; i++) {
+            int numNeurons = this.layers.get(i).getNumNeurons();
+            int numWeights = this.layers.get(i).getNumWeights();
+            numParams += numNeurons + numNeurons*numWeights;
+        }
+        return numParams;
+    }
+
+    public void setParameters(Chromosome chromosome) {
+        setBiases(getBiasesFromChromosome(chromosome));
+        setWeights(getWeightsFromChromosome(chromosome));
     }
 
     public void printNetworkProperties() {
@@ -83,68 +209,14 @@ public class NeuralNetwork {
         }
     }
 
-    public int getNumLayers() {
-        return this.layers.size();
-    }
-
-    // returns biases excluding input layer
-    public double[][] getBiases() {
-        int numLayers = getNumLayers();
-        double[][] biases = new double[numLayers-1][];
-        for (int i = 1; i < numLayers; i++) {
-            biases[i-1] = this.layers.get(i).getBiases();
-        }
-        return biases;
-    }
-
-    // returns weights excluding input layer
-    public double[][][] getWeights() {
-        int numLayers = getNumLayers();
-        double[][][] weights = new double[numLayers-1][][];
-        for (int i = 1; i < numLayers; i++) {
-            weights[i-1] = this.layers.get(i).getWeights();
-        }
-        return weights;
-    }
-
-    public int[] getArchitecture() {
-        int numLayers = getNumLayers();
-        int[] architecture = new int[numLayers];
-        for (int i = 0; i < numLayers; i++) {
-            architecture[i] = this.layers.get(i).getNumNeurons();
-        }
-        return architecture;
-    }
-
-    // returns the total number of biases and weights in this network
-    public int getNumParameters() {
-        int numLayers = getNumLayers();
-        int numParams = 0;
-        for (int i = 1; i < numLayers; i++) {
-            int numNeurons = this.layers.get(i).getNumNeurons();
-            int numWeights = this.layers.get(i).getNumWeights();
-            numParams += numNeurons + numNeurons*numWeights;
-        }
-        return numParams;
-    }
-
     public static void main(String[] args) {
-        NeuralNetwork network = new NeuralNetwork(new int[]{2, 2, 2});
+        NeuralNetwork network = new NeuralNetwork(new int[]{1, 5, 3});
         network.randomizeBiases();
         network.randomizeWeights();
-        network.evaluate(new double[]{0.5, 0.5});
+        network.evaluate(new double[]{0.5});
         network.printNetworkProperties();
         network.printNetworkBiases();
         network.printNetworkWeights();
-        network.printNetworkValues();
-
-        double[][][] w = network.getWeights();
-        for (int i = 0; i < w.length; i++) {
-            for (int j = 0; j < w[i].length; j++) {
-                for (int k = 0; k < w[i][j].length; k++) {
-                    System.out.println(w[i][j][k]);
-                }
-            }
-        }
+        network.printNetworkValues();;
     }
 }

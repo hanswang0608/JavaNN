@@ -1,9 +1,28 @@
 public class Chromosome {
-    private double[] genes; 
+    public double[] genes; 
+
+    public Chromosome(double[] genes) {
+        this.genes = genes;
+    }
 
     public Chromosome(NeuralNetwork network) {
         this.genes = new double[network.getNumParameters()];
         
+        setGenesFromNetwork(network);
+    }
+
+    public double[] getGenes() {
+        return this.genes;
+    }
+
+    public void setGenes(double[] genes) {
+        this.genes = genes;
+    }
+
+    public void setGenesFromNetwork(NeuralNetwork network) {
+        if (this.genes.length != network.getNumParameters()) {
+            throw new IllegalArgumentException("Dimension of network does not match length of chromosome");
+        }
         double[][] biases = network.getBiases();
         double[][][] weights = network.getWeights();
         int ind = 0;
@@ -38,15 +57,21 @@ public class Chromosome {
     }
 
     public static void main(String[] args) {
-        NeuralNetwork network = new NeuralNetwork(new int[]{10, 6, 4, 1});
+        NeuralNetwork network = new NeuralNetwork(new int[]{1, 5, 3});
         network.randomizeBiases();
         network.randomizeWeights();
-        network.printNetworkProperties();
         network.printNetworkBiases();
         network.printNetworkWeights();
 
         Chromosome chromosome = new Chromosome(network);
+        chromosome.genes[0] = 1000.0;
         chromosome.printChromosome();
+
+        network.setParameters(chromosome);
+        network.printNetworkProperties();
+        network.printNetworkBiases();
+        network.printNetworkWeights();
+        network.printNetworkValues();
     }
 
 }
