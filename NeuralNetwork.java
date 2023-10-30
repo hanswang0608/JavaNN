@@ -5,7 +5,7 @@ public class NeuralNetwork {
 
     public NeuralNetwork(int[] architecture) {
         this.layers = new ArrayList<Layer>(architecture.length);
-        this.layers.add(0, new Layer(architecture[0], 0, ActivationFunction.FuncTypes.RELU));
+        this.layers.add(0, new Layer(architecture[0], 0, null));
         ActivationFunction.FuncTypes layerType;
         for (int i = 1; i < architecture.length; i++) {
             layerType = (i == architecture.length - 1) 
@@ -49,11 +49,9 @@ public class NeuralNetwork {
         for (int i = 0; i < numLayers; i++) {
             Layer l = this.layers.get(i);
             String layerName = "Layer " + i;
-            // if (i == 0) layerName += "(input)"; 
-            // else if (i == numLayers-1) layerName += "(output)";
-            String layerNumNeurons =  "numNeurons= " + l.getNumNeurons();
-            String layerNumWeights = "numWeights= " + l.getNumWeights();
-            String layerActivationType = "activation= " + l.getActivationFunction();
+            String layerNumNeurons =  "numNeurons=" + l.getNumNeurons();
+            String layerNumWeights = "numWeights=" + l.getNumWeights();
+            String layerActivationType = "activation=" + l.getActivationFunction();
             System.out.println(layerName + ": " + layerNumNeurons + ", " + layerNumWeights + ", " + layerActivationType);
         }
     }
@@ -71,7 +69,7 @@ public class NeuralNetwork {
         System.out.println("----------------------------------------");
         System.out.println("Network Biases:");
         int numLayers = getNumLayers();
-        for (int i = 0; i < numLayers; i++){
+        for (int i = 1; i < numLayers; i++){
             this.layers.get(i).printBiases();
         }
     }
@@ -80,13 +78,33 @@ public class NeuralNetwork {
         System.out.println("----------------------------------------");
         System.out.println("Network Weights:");
         int numLayers = getNumLayers();
-        for (int i = 0; i < numLayers; i++){
+        for (int i = 1; i < numLayers; i++){
             this.layers.get(i).printWeights();
         }
     }
 
     public int getNumLayers() {
         return this.layers.size();
+    }
+
+    // returns biases excluding input layer
+    public double[][] getBiases() {
+        int numLayers = getNumLayers();
+        double[][] biases = new double[numLayers-1][];
+        for (int i = 1; i < numLayers; i++) {
+            biases[i-1] = this.layers.get(i).getBiases();
+        }
+        return biases;
+    }
+
+    // returns weights excluding input layer
+    public double[][][] getWeights() {
+        int numLayers = getNumLayers();
+        double[][][] weights = new double[numLayers-1][][];
+        for (int i = 1; i < numLayers; i++) {
+            weights[i-1] = this.layers.get(i).getWeights();
+        }
+        return weights;
     }
 
     public int[] getArchitecture() {
@@ -119,5 +137,14 @@ public class NeuralNetwork {
         network.printNetworkBiases();
         network.printNetworkWeights();
         network.printNetworkValues();
+
+        double[][][] w = network.getWeights();
+        for (int i = 0; i < w.length; i++) {
+            for (int j = 0; j < w[i].length; j++) {
+                for (int k = 0; k < w[i][j].length; k++) {
+                    System.out.println(w[i][j][k]);
+                }
+            }
+        }
     }
 }
