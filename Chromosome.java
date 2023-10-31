@@ -1,5 +1,11 @@
+import java.util.Random;
+
 public class Chromosome {
-    public double[] genes; 
+    private double[] genes;
+
+    public Chromosome(int numGenes) {
+        this.genes = new double[numGenes];
+    }
 
     public Chromosome(double[] genes) {
         this.genes = genes;
@@ -9,6 +15,14 @@ public class Chromosome {
         this.genes = new double[network.getNumParameters()];
         
         setGenesFromNetwork(network);
+    }
+
+    // add random noise to every gene
+    public void mutate(double mutationProbability) {
+        Random rand = new Random();
+        for (int i = 0; i < this.genes.length; i++) {
+            this.genes[i] += rand.nextDouble();
+        }
     }
 
     public double[] getGenes() {
