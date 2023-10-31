@@ -1,35 +1,43 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Chromosome {
     private double[] genes;
     private double fitness;
+    private int id;
+
+    private static int chromosomeCount;
     
     private static final double PARAM_LOWER_LIMIT = -10;
     private static final double PARAM_UPPER_LIMIT = 10;
-    private static final double MUTATION_PROBABILITY = 0.1;
-
+    private static final double GENE_MUTATION_PROBABILITY = 0.1;
+    
     public Chromosome(int numGenes) {
         this.genes = new double[numGenes];
+        this.id = chromosomeCount;
+        chromosomeCount++;
     }
 
     public Chromosome(double[] genes) {
         this.genes = genes;
+        this.id = chromosomeCount;
+        chromosomeCount++;
     }
 
     public Chromosome(NeuralNetwork network) {
         this.genes = new double[network.getNumParameters()];
-        
         setGenesFromNetwork(network);
+        this.id = chromosomeCount;
+        chromosomeCount++;
     }
 
-    // return a crossover child of two parents
-    public static Chromosome crossover(Chromosome a, Chromosome b) {
-        //TODO
-        return new Chromosome(0);
+    // return two children by crossover of two parents
+    public static Chromosome[] crossover(Chromosome a, Chromosome b) {
+        return uniformCrossover(a, b);
     }
 
     public void mutate() {
-        uniformMutation(MUTATION_PROBABILITY);
+        uniformMutation(GENE_MUTATION_PROBABILITY);
     }
     
     // randomize entire chromosome within range
@@ -37,6 +45,29 @@ public class Chromosome {
         for (int i = 0; i < this.genes.length; i++) {
             this.genes[i] = Utils.randDouble(PARAM_LOWER_LIMIT, PARAM_UPPER_LIMIT);
         }
+    }
+
+    // produce two children through uniform crossover
+    public static Chromosome[] uniformCrossover(Chromosome p1, Chromosome p2) {
+        Chromosome[] children = new Chromosome[2];
+        double[] g1 = p1.getGenes();
+        double[] g2 = p2.getGenes();
+        double[] c1 = new double[g1.length];
+        double[] c2 = new double[g2.length];
+
+        for (int i = 0; i < g1.length; i++) {
+            if (Utils.randBool(0.5)) {
+                c1[i] = g1[i];
+                c2[i] = g2[i];
+            } else {
+                c1[i] = g2[i];
+                c2[i] = g1[i];
+            }
+        }
+
+        children[0] = new Chromosome(c1);
+        children[1] = new Chromosome(c2);
+        return children;
     }
 
     // mutate each gene independently by probability, sampled from uniform distribution within param limits
@@ -49,10 +80,12 @@ public class Chromosome {
     }
 
     // add random noise to every gene
-    public void gaussianMutation() {
+    public void gaussianMutation(double probability) {
         double range = (PARAM_UPPER_LIMIT-PARAM_LOWER_LIMIT)/4;
         for (int i = 0; i < this.genes.length; i++) {
-            this.genes[i] = clampToLimits(Utils.randGaussian(this.genes[i], range));
+            if (Utils.randBool(probability)) {
+                this.genes[i] = clampToLimits(Utils.randGaussian(this.genes[i], range));
+            }
         }
     }
 
@@ -97,7 +130,7 @@ public class Chromosome {
         }
         s += "]";
         System.out.println("----------------------------------------");
-        System.out.print("Chromosome: ");
+        System.out.print("Chromosome " + this.id + ": ");
         System.out.println(s);
     }
 
@@ -112,10 +145,16 @@ public class Chromosome {
     }
 
     public static void main(String[] args) {
-        Chromosome chromosome = new Chromosome(12);
-        for (int i = 0; i < 10; i++) {
-            chromosome.uniformMutation(0.2);
-            chromosome.printChromosome();
+        Chromosome p1 = new Chromosome(12);
+        Chromosome p2 = new Chromosome(12);
+        p1.randomize();
+        p2.randomize();
+        p1.printChromosome();
+        p2.printChromosome();
+        Chromosome[] children = Chromosome.crossover(p1, p2);
+        for (Chromosome child: children) {
+            child.printChromosome();
         }
+        
     }
 }
