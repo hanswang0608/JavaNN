@@ -2,6 +2,10 @@ import java.util.Random;
 
 public class Chromosome {
     private double[] genes;
+    private double fitness;
+    
+    private static final double PARAM_LOWER_LIMIT = -10;
+    private static final double PARAM_UPPER_LIMIT = 10;
 
     public Chromosome(int numGenes) {
         this.genes = new double[numGenes];
@@ -17,11 +21,27 @@ public class Chromosome {
         setGenesFromNetwork(network);
     }
 
-    // add random noise to every gene
-    public void mutate(double mutationProbability) {
-        Random rand = new Random();
+    // return a crossover child of two parents
+    public static Chromosome crossover(Chromosome a, Chromosome b) {
+        //TODO
+        return new Chromosome(0);
+    }
+
+    public void mutate() {
+        uniformMutation();
+    }
+
+    public void uniformMutation() {
         for (int i = 0; i < this.genes.length; i++) {
-            this.genes[i] += rand.nextDouble();
+            this.genes[i] = Utils.randDouble(PARAM_LOWER_LIMIT, PARAM_UPPER_LIMIT);
+        }
+    }
+
+    // add random noise to every gene
+    public void gaussianMutation() {
+        double range = (PARAM_UPPER_LIMIT-PARAM_LOWER_LIMIT)/4;
+        for (int i = 0; i < this.genes.length; i++) {
+            this.genes[i] = clampToLimits(Utils.randGaussian(this.genes[i], range));
         }
     }
 
@@ -66,26 +86,26 @@ public class Chromosome {
         }
         s += "]";
         System.out.println("----------------------------------------");
-        System.out.println("Chromosome:");
+        System.out.print("Chromosome: ");
         System.out.println(s);
     }
 
+    public static double clampToLimits(double x) {
+        if (x > PARAM_UPPER_LIMIT) x = PARAM_UPPER_LIMIT;
+        if (x < PARAM_LOWER_LIMIT) x = PARAM_LOWER_LIMIT;
+        return x;
+    }
+
+    public static double getDistanceToLimit(double x) {
+        return Math.min(Math.abs(PARAM_UPPER_LIMIT-x), Math.abs(PARAM_LOWER_LIMIT-x));
+    }
+
     public static void main(String[] args) {
-        NeuralNetwork network = new NeuralNetwork(new int[]{1, 5, 3});
-        network.randomizeBiases();
-        network.randomizeWeights();
-        network.printNetworkBiases();
-        network.printNetworkWeights();
-
-        Chromosome chromosome = new Chromosome(network);
-        chromosome.genes[0] = 1000.0;
-        chromosome.printChromosome();
-
-        network.setParameters(chromosome);
-        network.printNetworkProperties();
-        network.printNetworkBiases();
-        network.printNetworkWeights();
-        network.printNetworkValues();
+        Chromosome chromosome = new Chromosome(12);
+        for (int i = 0; i < 10; i++) {
+            chromosome.mutate();
+            chromosome.printChromosome();
+        }
     }
 
 }
