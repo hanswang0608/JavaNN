@@ -107,5 +107,4 @@ public class Chromosome {
             chromosome.printChromosome();
         }
     }
-
 }
