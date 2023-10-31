@@ -16,4 +16,8 @@ public class Utils {
     public static double randGaussian(double mean, double stddev) {
         return rand.nextGaussian()*stddev+mean;
     }
+
+    public static boolean randBool(double probability) {
+        return rand.nextDouble() <= probability;
+    }
 }

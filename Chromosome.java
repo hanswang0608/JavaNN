@@ -6,6 +6,7 @@ public class Chromosome {
     
     private static final double PARAM_LOWER_LIMIT = -10;
     private static final double PARAM_UPPER_LIMIT = 10;
+    private static final double MUTATION_PROBABILITY = 0.1;
 
     public Chromosome(int numGenes) {
         this.genes = new double[numGenes];
@@ -28,12 +29,22 @@ public class Chromosome {
     }
 
     public void mutate() {
-        uniformMutation();
+        uniformMutation(MUTATION_PROBABILITY);
     }
-
-    public void uniformMutation() {
+    
+    // randomize entire chromosome within range
+    public void randomize() {
         for (int i = 0; i < this.genes.length; i++) {
             this.genes[i] = Utils.randDouble(PARAM_LOWER_LIMIT, PARAM_UPPER_LIMIT);
+        }
+    }
+
+    // mutate each gene independently by probability, sampled from uniform distribution within param limits
+    public void uniformMutation(double probability) {
+        for (int i = 0; i < this.genes.length; i++) {
+            if (Utils.randBool(probability)) {
+                this.genes[i] = Utils.randDouble(PARAM_LOWER_LIMIT, PARAM_UPPER_LIMIT);
+            }
         }
     }
 
@@ -103,7 +114,7 @@ public class Chromosome {
     public static void main(String[] args) {
         Chromosome chromosome = new Chromosome(12);
         for (int i = 0; i < 10; i++) {
-            chromosome.mutate();
+            chromosome.uniformMutation(0.2);
             chromosome.printChromosome();
         }
     }
