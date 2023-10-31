@@ -33,8 +33,8 @@ public class Chromosome {
     }
 
     // return two children by crossover of two parents
-    public static Chromosome[] crossover(Chromosome a, Chromosome b) {
-        return uniformCrossover(a, b);
+    public static void crossover(Chromosome a, Chromosome b) {
+        uniformCrossover(a, b);
     }
 
     public void mutate() {
@@ -49,12 +49,9 @@ public class Chromosome {
     }
 
     // produce two children through uniform crossover
-    public static Chromosome[] uniformCrossover(Chromosome p1, Chromosome p2) {
-        Chromosome[] children = new Chromosome[2];
+    public static void uniformCrossover(Chromosome p1, Chromosome p2) {
         double[] g1 = p1.getGenes();
         double[] g2 = p2.getGenes();
-        double[] c1 = new double[g1.length];
-        double[] c2 = new double[g2.length];
 
         if (g1.length != g2.length) {
             throw new IllegalArgumentException("Cannot perform crossover on chromosomes of different length");
@@ -62,17 +59,14 @@ public class Chromosome {
 
         for (int i = 0; i < g1.length; i++) {
             if (Utils.randBool(0.5)) {
-                c1[i] = g1[i];
-                c2[i] = g2[i];
-            } else {
-                c1[i] = g2[i];
-                c2[i] = g1[i];
+                double temp = g1[i];
+                g1[i] = g2[i];
+                g2[i] = temp;
             }
         }
 
-        children[0] = new Chromosome(c1);
-        children[1] = new Chromosome(c2);
-        return children;
+        p1.setGenes(g1);
+        p2.setGenes(g2);
     }
 
     public static void wholeArithmeticCrossover(Chromosome p1, Chromosome p2) {
@@ -173,7 +167,7 @@ public class Chromosome {
         p2.randomize();
         p1.printChromosome();
         p2.printChromosome();
-        Chromosome.wholeArithmeticCrossover(p1, p2);
+        Chromosome.uniformCrossover(p1, p2);
         p1.printChromosome();
         p2.printChromosome();
     }
