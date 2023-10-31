@@ -84,7 +84,7 @@ public class Layer {
         int numNeurons = getNumNeurons();
         String s = "";
         for (int i = 0; i < numNeurons; i++) {
-            s += Utils.formatDouble(this.values.get(i)).toString() + ' ';
+            s += Utils.roundDouble(this.values.get(i)).toString() + ' ';
         }
         System.out.println(s);
     }
@@ -93,7 +93,7 @@ public class Layer {
         int numNeurons = getNumNeurons();
         String s = "";
         for (int i = 0; i < numNeurons; i++) {
-            s += Utils.formatDouble(this.biases.get(i)).toString() + ' ';
+            s += Utils.roundDouble(this.biases.get(i)).toString() + ' ';
         }
         System.out.println(s);
     }
@@ -105,7 +105,7 @@ public class Layer {
         for (int i = 0; i < numNeurons; i++) {
             s += "[";
             for (int j = 0; j < numWeights; j++) {
-                s += Utils.formatDouble(this.weights.get(i).get(j)).toString() + ",";
+                s += Utils.roundDouble(this.weights.get(i).get(j)).toString() + ",";
             }
             s += "] ";
         }

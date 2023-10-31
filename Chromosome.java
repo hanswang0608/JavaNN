@@ -168,6 +168,8 @@ public class Chromosome {
         p1.printChromosome();
         p2.printChromosome();
         Chromosome.uniformCrossover(p1, p2);
+        p1.gaussianMutation(1);
+        p2.gaussianMutation(1);
         p1.printChromosome();
         p2.printChromosome();
     }
