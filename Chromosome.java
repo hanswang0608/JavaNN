@@ -75,25 +75,21 @@ public class Chromosome {
         return children;
     }
 
-    public static Chromosome[] wholeArithmeticCrossover(Chromosome p1, Chromosome p2) {
-        Chromosome[] children = new Chromosome[2];
+    public static void wholeArithmeticCrossover(Chromosome p1, Chromosome p2) {
         double[] g1 = p1.getGenes();
         double[] g2 = p2.getGenes();
-        double[] c1 = new double[g1.length];
-        double[] c2 = new double[g2.length];
         
         if (g1.length != g2.length) {
             throw new IllegalArgumentException("Cannot perform crossover on chromosomes of different length");
         }
 
         for (int i = 0; i < g1.length; i++) {
-            c1[i] = WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT*g1[i]+(1-WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT)*g2[i];
-            c2[i] = WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT*g2[i]+(1-WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT)*g1[i];
+            g1[i] = WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT*g1[i]+(1-WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT)*g2[i];
+            g2[i] = WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT*g2[i]+(1-WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT)*g1[i];
         }
-
-        children[0] = new Chromosome(c1);
-        children[1] = new Chromosome(c2);
-        return children;
+        
+        p1.setGenes(g1);
+        p2.setGenes(g2);
     }
 
     // mutate each gene independently by probability, sampled from uniform distribution within param limits
@@ -177,9 +173,8 @@ public class Chromosome {
         p2.randomize();
         p1.printChromosome();
         p2.printChromosome();
-        Chromosome[] children = Chromosome.wholeArithmeticCrossover(p1, p2);
-        for (Chromosome child: children) {
-            child.printChromosome();
-        }
+        Chromosome.wholeArithmeticCrossover(p1, p2);
+        p1.printChromosome();
+        p2.printChromosome();
     }
 }
