@@ -11,6 +11,7 @@ public class Chromosome {
     private static final double PARAM_LOWER_LIMIT = -10;
     private static final double PARAM_UPPER_LIMIT = 10;
     private static final double GENE_MUTATION_PROBABILITY = 0.1;
+    private static final double WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT = 0.6;
     
     public Chromosome(int numGenes) {
         this.genes = new double[numGenes];
@@ -55,6 +56,10 @@ public class Chromosome {
         double[] c1 = new double[g1.length];
         double[] c2 = new double[g2.length];
 
+        if (g1.length != g2.length) {
+            throw new IllegalArgumentException("Cannot perform crossover on chromosomes of different length");
+        }
+
         for (int i = 0; i < g1.length; i++) {
             if (Utils.randBool(0.5)) {
                 c1[i] = g1[i];
@@ -63,6 +68,27 @@ public class Chromosome {
                 c1[i] = g2[i];
                 c2[i] = g1[i];
             }
+        }
+
+        children[0] = new Chromosome(c1);
+        children[1] = new Chromosome(c2);
+        return children;
+    }
+
+    public static Chromosome[] wholeArithmeticCrossover(Chromosome p1, Chromosome p2) {
+        Chromosome[] children = new Chromosome[2];
+        double[] g1 = p1.getGenes();
+        double[] g2 = p2.getGenes();
+        double[] c1 = new double[g1.length];
+        double[] c2 = new double[g2.length];
+        
+        if (g1.length != g2.length) {
+            throw new IllegalArgumentException("Cannot perform crossover on chromosomes of different length");
+        }
+
+        for (int i = 0; i < g1.length; i++) {
+            c1[i] = WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT*g1[i]+(1-WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT)*g2[i];
+            c2[i] = WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT*g2[i]+(1-WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT)*g1[i];
         }
 
         children[0] = new Chromosome(c1);
@@ -151,10 +177,9 @@ public class Chromosome {
         p2.randomize();
         p1.printChromosome();
         p2.printChromosome();
-        Chromosome[] children = Chromosome.crossover(p1, p2);
+        Chromosome[] children = Chromosome.wholeArithmeticCrossover(p1, p2);
         for (Chromosome child: children) {
             child.printChromosome();
         }
-        
     }
 }
