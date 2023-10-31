@@ -162,6 +162,14 @@ public class NeuralNetwork {
         return numParams;
     }
 
+    public static int getNumParameters(int[] architecture) {
+        int numParams = 0;
+        for (int i = 1; i < architecture.length; i++) {
+            numParams += architecture[i] + architecture[i]*architecture[i-1];
+        }
+        return numParams;
+    }
+
     public void setParameters(Chromosome chromosome) {
         setBiases(getBiasesFromChromosome(chromosome));
         setWeights(getWeightsFromChromosome(chromosome));
@@ -218,5 +226,6 @@ public class NeuralNetwork {
         network.printNetworkBiases();
         network.printNetworkWeights();
         network.printNetworkValues();;
+
     }
 }
