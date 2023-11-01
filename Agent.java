@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class Agent {
+public class Agent implements Comparable<Agent>{
     private Chromosome chromosome;
     private NeuralNetwork network;
     private double fitness;
@@ -62,6 +62,11 @@ public class Agent {
             sum += Math.pow(results[i]-Math.PI/10, 2);
         }
         return 1-sum/results.length;
+    }
+
+    @Override
+    public int compareTo(Agent other) {
+        return Double.compare(other.getFitness(), this.fitness);
     }
 
     public static void main(String[] args) {
