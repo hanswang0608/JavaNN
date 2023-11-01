@@ -1,6 +1,3 @@
-import java.util.Arrays;
-import java.util.Random;
-
 public class Chromosome {
     private double[] genes;
     private int id;
