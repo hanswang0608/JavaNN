@@ -4,6 +4,9 @@ public class Agent implements Comparable<Agent>{
     private Chromosome chromosome;
     private NeuralNetwork network;
     private double fitness;
+    private int id;
+
+    private static int agentsCount = 0;
 
     public Agent(int[] architecture) {
         this.fitness = 0;
@@ -11,6 +14,9 @@ public class Agent implements Comparable<Agent>{
         this.chromosome.randomize();
         this.network = new NeuralNetwork(architecture);
         updateNetwork();
+
+        this.id = agentsCount;
+        agentsCount++;
     }
 
     public double[] act(double[] inputs) {
@@ -67,6 +73,10 @@ public class Agent implements Comparable<Agent>{
     @Override
     public int compareTo(Agent other) {
         return Double.compare(other.getFitness(), this.fitness);
+    }
+
+    public String toString() {
+        return "Agent " + this.id + ": Fitness=" + Utils.roundDouble(this.fitness, 3); 
     }
 
     public static void main(String[] args) {

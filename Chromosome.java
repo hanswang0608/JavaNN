@@ -1,9 +1,6 @@
 public class Chromosome {
     private double[] genes;
-    private int id;
 
-    private static int chromosomeCount;
-    
     private static final double PARAM_LOWER_LIMIT = -10;
     private static final double PARAM_UPPER_LIMIT = 10;
     private static final double GENE_MUTATION_PROBABILITY = 0.1;
@@ -11,21 +8,15 @@ public class Chromosome {
     
     public Chromosome(int numGenes) {
         this.genes = new double[numGenes];
-        this.id = chromosomeCount;
-        chromosomeCount++;
     }
 
     public Chromosome(double[] genes) {
         this.genes = genes;
-        this.id = chromosomeCount;
-        chromosomeCount++;
     }
 
     public Chromosome(NeuralNetwork network) {
         this.genes = new double[network.getNumParameters()];
         setGenesFromNetwork(network);
-        this.id = chromosomeCount;
-        chromosomeCount++;
     }
 
     // return two children by crossover of two parents
@@ -134,16 +125,14 @@ public class Chromosome {
         }
     }
 
-    public void printChromosome() {
+    public String toString() {
         String s = "[";
         for (int i = 0; i < this.genes.length; i++) {
             s += Utils.formatDouble(this.genes[i]);
             if (i < this.genes.length-1) s += "|";
         }
         s += "]";
-        System.out.println("----------------------------------------");
-        System.out.print("Chromosome " + this.id + ": ");
-        System.out.println(s);
+        return s;
     }
 
     public static double clampToLimits(double x) {
@@ -161,12 +150,12 @@ public class Chromosome {
         Chromosome p2 = new Chromosome(12);
         p1.randomize();
         p2.randomize();
-        p1.printChromosome();
-        p2.printChromosome();
+        System.out.println(p1);
+        System.out.println(p2);
         Chromosome.uniformCrossover(p1, p2);
         p1.gaussianMutation(1);
         p2.gaussianMutation(1);
-        p1.printChromosome();
-        p2.printChromosome();
+        System.out.println(p1);
+        System.out.println(p2);
     }
 }
