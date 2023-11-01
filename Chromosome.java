@@ -3,7 +3,6 @@ import java.util.Random;
 
 public class Chromosome {
     private double[] genes;
-    private double fitness;
     private int id;
 
     private static int chromosomeCount;
