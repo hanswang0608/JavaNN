@@ -5,9 +5,29 @@ public class Agent {
 
     public Agent(int[] architecture) {
         this.fitness = 0;
-        this.network = new NeuralNetwork(architecture);
-        this.chromosome = new Chromosome(network);
+        this.chromosome = new Chromosome(NeuralNetwork.getNumParameters(architecture));
         this.chromosome.randomize();
+        this.network = new NeuralNetwork(architecture);
+        updateNetwork();
+    }
+
+    public double[] execute(double[] inputs) {
+        return this.network.evaluate(inputs);
+    }
+
+    public Chromosome getChromosome() {
+        return this.chromosome;
+    }
+
+    public void setChromosome(Chromosome chromosome) {
+        this.chromosome = chromosome;
+    }
+
+    public NeuralNetwork getNetwork() {
+        return this.network;
+    }
+
+    public void updateNetwork() {
         this.network.setParameters(chromosome);
     }
 
@@ -19,7 +39,5 @@ public class Agent {
         this.fitness = fitness;
     }
 
-    public double[] execute(double[] inputs) {
-        return this.network.evaluate(inputs);
-    }
+
 }
