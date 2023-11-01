@@ -139,6 +139,18 @@ public class NeuralNetwork {
         }
     }
 
+    public double[][] getValues() {
+        int numLayers = getNumLayers();
+        double[][] values = new double[numLayers][];
+        for (int i = 0; i < numLayers; i++) {
+            values[i] = this.layers.get(i).getValues();
+        }
+        return values;
+    }
+
+    public double[] getOutputs() {
+        return this.layers.get(getNumLayers()-1).getValues();
+    }
 
     public int[] getArchitecture() {
         int numLayers = getNumLayers();
