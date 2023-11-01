@@ -26,15 +26,21 @@ public class Population {
     public void selectByRank() {
         sortAgentsByFitness();
         int populationSize = getPopulationSize();
-        double[] shares = new double[populationSize];
+        double[] odds = new double[populationSize];
         double totalShares = 1;
-        shares[populationSize-1] = 1;
+        odds[populationSize-1] = 1;
         for (int i = populationSize-2; i >= 0; i--) {
-            shares[i] = 2*shares[i+1];
-            totalShares += shares[i];
+            odds[i] = 2*odds[i+1];
+            totalShares += odds[i];
         }
-        
-
+        for (int i = 0; i < populationSize; i++) {
+            odds[i] = (double)odds[i]/totalShares;
+        }
+        RouletteSelector selector = new RouletteSelector(odds);
+        System.out.println(selector);
+        for (int i = 0; i < 10; i++) {
+            System.out.println(selector.select());
+        }
     }
 
     public void sortAgentsByFitness() {
@@ -71,7 +77,7 @@ public class Population {
     public static void main(String[] args) {
         int[] arch = new int[]{2,2,2};
         double[] inputs = new double[]{1,1};
-        Population p = new Population(4, arch);
+        Population p = new Population(10, arch);
         for (Agent a : p.getAgents()) {
             a.act(inputs);
             a.updateFitness();
