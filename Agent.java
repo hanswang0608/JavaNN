@@ -76,7 +76,7 @@ public class Agent implements Comparable<Agent>{
     }
 
     public String toString() {
-        return "Agent " + this.id + ": Fitness=" + Utils.roundDouble(this.fitness, 3); 
+        return "Agent " + this.id + ": Fitness=" + Utils.formatDouble(this.fitness, 3); 
     }
 
     public static void main(String[] args) {

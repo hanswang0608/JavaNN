@@ -5,19 +5,23 @@ public class Utils {
     private static final DecimalFormat df = new DecimalFormat("+0.00;-0.00");
     private static final Random rand = new Random();
     
-    public static String roundDouble(double x) {
+    public static double roundDouble(double x, int places) {
+        return Math.round(x * Math.pow(10, places))/Math.pow(10, places);
+    }
+
+    public static String formatDouble(double x) {
         df.applyPattern("0.00");
         return df.format(x);
     }
 
-    public static String roundDouble(double x, int places) {
+    public static String formatDouble(double x, int places) {
         String pattern = "0.";
         for (int i = 0; i < places; i++) pattern += "0";
         df.applyPattern(pattern);
         return df.format(x);
     }
 
-    public static String formatDouble(double x) {
+    public static String prettifyDouble(double x) {
         df.applyPattern("+0.00;-0.00");
         if (x == 10.0) return "+10.0";
         if (x == -10.0) return "-10.0";

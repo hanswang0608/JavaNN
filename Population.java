@@ -27,10 +27,10 @@ public class Population {
         sortAgentsByFitness();
         int populationSize = getPopulationSize();
         double[] odds = new double[populationSize];
-        double totalShares = 1;
-        odds[populationSize-1] = 1;
+        double totalShares = populationSize;
+        odds[populationSize-1] = populationSize;
         for (int i = populationSize-2; i >= 0; i--) {
-            odds[i] = 2*odds[i+1];
+            odds[i] = populationSize+odds[i+1];
             totalShares += odds[i];
         }
         for (int i = 0; i < populationSize; i++) {
@@ -38,7 +38,7 @@ public class Population {
         }
         RouletteSelector selector = new RouletteSelector(odds);
         System.out.println(selector);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < populationSize; i++) {
             System.out.println(selector.select());
         }
     }

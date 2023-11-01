@@ -8,7 +8,7 @@ public class RouletteSelector {
         for (int i = 1; i < odds.length; i++) {
             roulette[i] = roulette[i-1] + odds[i];
         } 
-        if (roulette[roulette.length-1] != 1.0) {
+        if (Double.compare(Utils.roundDouble(roulette[roulette.length-1], 5), 1.0) != 0) {
             throw new IllegalArgumentException("Sum of odds does not equal 1");
         }
     }
@@ -21,14 +21,14 @@ public class RouletteSelector {
                 return i;
             }
         }
-        
+
         return -1;
     }
 
     public String toString() {
         String s = "(";
         for (int i = 0; i < this.roulette.length; i++) {
-            s += Utils.roundDouble(roulette[i]);
+            s += Utils.formatDouble(roulette[i], 3);
             if (i != this.roulette.length-1) s += "|";
         }
         return s + ")";

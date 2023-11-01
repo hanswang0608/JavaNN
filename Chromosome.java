@@ -128,7 +128,7 @@ public class Chromosome {
     public String toString() {
         String s = "[";
         for (int i = 0; i < this.genes.length; i++) {
-            s += Utils.formatDouble(this.genes[i]);
+            s += Utils.prettifyDouble(this.genes[i]);
             if (i < this.genes.length-1) s += "|";
         }
         s += "]";
