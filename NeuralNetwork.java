@@ -3,14 +3,17 @@ import java.util.ArrayList;
 public class NeuralNetwork {
     private ArrayList<Layer> layers;
 
+    private static final ActivationFunction.FuncTypes HIDDEN_LAYER_TYPE = ActivationFunction.FuncTypes.SIN;
+    private static final ActivationFunction.FuncTypes OUTPUT_LAYER_TYPE = ActivationFunction.FuncTypes.SIGMOID;
+
     public NeuralNetwork(int[] architecture) {
         this.layers = new ArrayList<Layer>(architecture.length);
         this.layers.add(0, new Layer(architecture[0], 0, null));
         ActivationFunction.FuncTypes layerType;
         for (int i = 1; i < architecture.length; i++) {
             layerType = (i == architecture.length - 1) 
-                ? ActivationFunction.FuncTypes.SIGMOID
-                : ActivationFunction.FuncTypes.RELU;
+                ? OUTPUT_LAYER_TYPE
+                : HIDDEN_LAYER_TYPE;
             this.layers.add(i, new Layer(architecture[i], architecture[i-1], layerType));
         }
     }

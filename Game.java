@@ -49,7 +49,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(100000, 10, new int[]{1,4,4,1});
+        Game game = new Game(10000, 10, new int[]{1,1,1});
         game.start();
     }
 

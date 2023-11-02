@@ -1,13 +1,15 @@
 public class ActivationFunction {
     public enum FuncTypes {
         SIGMOID,
-        RELU
+        RELU,
+        SIN
     }
     
     public static double activate(double x, FuncTypes func) {
         switch (func) {
             case SIGMOID: return ActivationFunction.sigmoid(x);
             case RELU: return ActivationFunction.ReLU(x);
+            case SIN: return Math.sin(x);
             default: return ActivationFunction.sigmoid(x);
         }
     }
