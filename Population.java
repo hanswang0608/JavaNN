@@ -2,28 +2,24 @@ import java.util.Arrays;
 
 public class Population {
     private Agent[] agents;
-    private int generation;
-    private double averageFitness;
+    private int[] networkArchitecture;
     
+    private static final double CROSSOVER_PROBABILITY = 0.8;
+    private static final double MUTATION_PROBABILITY = 0.1;
+    private static final double GENE_MUTATION_PROBABILITY = 1.0;
 
     public Population(int populationSize, int[] networkArchitecture) {
         if (populationSize % 2 != 0) {
             throw new IllegalArgumentException("Population must be an even number");
         }
         this.agents = new Agent[populationSize];
-        this.generation = 0;
-        this.averageFitness = 0;
+        this.networkArchitecture = networkArchitecture;
         for (int i = 0; i < populationSize; i++) {
             agents[i] = new Agent(networkArchitecture);
         }
     }
-    
-    // execute one iteration of Genetic Algorithm
-    // perform crossover and mutation on current population to produce a new generation
-    public void evolve() {
-    }
 
-    public void selectByRank() {
+    public void selectParentsByRank() {
         sortAgentsByFitness();
         int populationSize = getPopulationSize();
         double[] odds = new double[populationSize];
@@ -37,25 +33,37 @@ public class Population {
             odds[i] = (double)odds[i]/totalShares;
         }
         RouletteSelector selector = new RouletteSelector(odds);
-        System.out.println(selector);
+        Agent[] parents = new Agent[populationSize];
         for (int i = 0; i < populationSize; i++) {
-            System.out.println(selector.select());
+            int selected = selector.select();
+            parents[i] = this.agents[selected].copy();
         }
+        this.agents = parents;
     }
 
     public void sortAgentsByFitness() {
         Arrays.sort(agents);
     }
     
-    public static void crossover(Agent a1, Agent a2) {
-        Chromosome c1 = a1.getChromosome();
-        Chromosome c2 = a2.getChromosome();
-        Chromosome.crossover(c1, c2);
+    public void crossoverPopulation() {
+        int populationSize = getPopulationSize();
+        for (int i = 0; i < populationSize; i+=2) {
+            if (Utils.randBool(CROSSOVER_PROBABILITY)) {
+                Chromosome c1 = this.agents[i].getChromosome();
+                Chromosome c2 = this.agents[i+1].getChromosome();
+                Chromosome.crossover(c1, c2);
+            }
+        }
     }
 
-    public static void mutate(Agent agent) {
-        Chromosome chromosome = agent.getChromosome();
-        chromosome.mutate();
+    public void mutatePopulation() {
+        int populationSize = getPopulationSize();
+        for (int i = 0; i < populationSize; i++) {
+            if (Utils.randBool(MUTATION_PROBABILITY)) {
+                Chromosome c = this.agents[i].getChromosome();
+                Chromosome.mutate(c, GENE_MUTATION_PROBABILITY);
+            }
+        }
     }
 
     public int getPopulationSize() {
@@ -66,11 +74,13 @@ public class Population {
         return this.agents;
     }
 
-    public void printAgents() {
+    public void printAgents(boolean showChromosome) {
         System.out.println("----------------------------------------");
         System.out.println("Population:");
         for (Agent agent : agents) {
-            System.out.println(agent);
+            String s = "Agent " + agent.getID() + ": Fitness=" + Utils.formatDouble(agent.getFitness(), 3);
+            if (showChromosome) s += " " + agent.getChromosome().toString();
+            System.out.println(s);
         }
     }
 
@@ -82,8 +92,17 @@ public class Population {
             a.act(inputs);
             a.updateFitness();
         }
-        p.selectByRank();
-        
+        p.sortAgentsByFitness();
+        p.printAgents(true);
+        p.selectParentsByRank();
+        p.crossoverPopulation();
+        p.mutatePopulation();
+        for (Agent a : p.getAgents()) {
+            a.act(inputs);
+            a.updateFitness();
+        }
+        p.sortAgentsByFitness();
+        p.printAgents(true);
     }
 
 }

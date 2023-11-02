@@ -3,7 +3,6 @@ public class Chromosome {
 
     private static final double PARAM_LOWER_LIMIT = -10;
     private static final double PARAM_UPPER_LIMIT = 10;
-    private static final double GENE_MUTATION_PROBABILITY = 0.1;
     private static final double WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT = 0.6;
     
     public Chromosome(int numGenes) {
@@ -24,8 +23,8 @@ public class Chromosome {
         uniformCrossover(a, b);
     }
 
-    public void mutate() {
-        uniformMutation(GENE_MUTATION_PROBABILITY);
+    public static void mutate(Chromosome c, double probability) {
+        c.uniformMutation(probability);
     }
     
     // randomize entire chromosome within range

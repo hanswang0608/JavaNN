@@ -70,9 +70,19 @@ public class Agent implements Comparable<Agent>{
         return 1-sum/results.length;
     }
 
+    public int getID() {
+        return this.id;
+    }
+
     @Override
     public int compareTo(Agent other) {
         return Double.compare(other.getFitness(), this.fitness);
+    }
+
+    public Agent copy() {
+        Agent clone = new Agent(this.network.getArchitecture());
+        clone.chromosome.setGenes(this.chromosome.getGenes().clone());
+        return clone;
     }
 
     public String toString() {
