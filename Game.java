@@ -21,19 +21,20 @@ public class Game {
     }
 
     public void start() {
+        double[] inputs = {1,1};
         for (int i = 0; i < numIterations; i++) {
-            double[] inputs = {1,1};
             act(inputs);
             population.sortAgentsByFitness();
-            population.printAgents(true, true);
+            // population.printAgents(true, true);
             if (i < numIterations - 1) {
                 evolve();
             }
         }
+        population.printAgents(true, true);
     }
 
     public static void main(String[] args) {
-        Game game = new Game(10, 10, new int[]{2,2,1});
+        Game game = new Game(1000, 10, new int[]{2,3,4,1});
         game.start();
     }
 
