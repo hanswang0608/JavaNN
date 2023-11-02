@@ -25,7 +25,7 @@ public class Game {
             double[] inputs = {1,1};
             act(inputs);
             population.sortAgentsByFitness();
-            population.printAgents(true);
+            population.printAgents(true, true);
             if (i < numIterations - 1) {
                 evolve();
             }
@@ -33,7 +33,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(100, 10, new int[]{2,2,2});
+        Game game = new Game(10, 10, new int[]{2,2,1});
         game.start();
     }
 

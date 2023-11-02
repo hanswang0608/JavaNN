@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class Agent implements Comparable<Agent>{
     private Chromosome chromosome;
     private NeuralNetwork network;
@@ -63,11 +61,26 @@ public class Agent implements Comparable<Agent>{
 
     // return a fitness of the agent based on results
     public double calculateFitness(double[] results) {
-        double sum = 0;
-        for (int i = 0; i < results.length; i++) {
-            sum += Math.pow(results[i]-Math.PI/10, 2);
+        return dummyFitnessFunction(results);
+    }
+
+    private double dummyFitnessFunction(double[] input) {
+        int sum = 0;
+        for (int i = 0; i < input.length; i++) {
+            if (input[i] > 0.99) {
+                sum += 10;
+            }
         }
-        return 1-sum/results.length;
+        return sum;
+    }
+
+    // dummy fitness function that returns fitness as RMS error of PI
+    private double piRMS(double[] x) {
+        double sum = 0;
+        for (int i = 0; i < x.length; i++) {
+            sum += Math.pow(x[i]-Math.PI/10, 2);
+        }
+        return 1-sum/x.length;
     }
 
     public int getID() {

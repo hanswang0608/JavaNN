@@ -74,12 +74,21 @@ public class Population {
         return this.agents;
     }
 
-    public void printAgents(boolean showChromosome) {
+    public void printAgents(boolean showChromosome, boolean showOutputs) {
         System.out.println("----------------------------------------");
         System.out.println("Population:");
         for (Agent agent : agents) {
             String s = "Agent " + agent.getID() + ": Fitness=" + Utils.formatDouble(agent.getFitness(), 3);
             if (showChromosome) s += " " + agent.getChromosome().toString();
+            if (showOutputs) {
+                double[] outputs = agent.getNetworkOutputs();
+                s += " Outputs: {";
+                for (int i = 0; i < outputs.length; i++) {
+                    s += Utils.roundDouble(outputs[i], 2);
+                    if (i < outputs.length - 1) s += "|";
+                }
+                s += "}";
+            }
             System.out.println(s);
         }
     }
@@ -93,7 +102,7 @@ public class Population {
             a.updateFitness();
         }
         p.sortAgentsByFitness();
-        p.printAgents(true);
+        p.printAgents(true, false);
         p.selectParentsByRank();
         p.crossoverPopulation();
         p.mutatePopulation();
@@ -102,7 +111,7 @@ public class Population {
             a.updateFitness();
         }
         p.sortAgentsByFitness();
-        p.printAgents(true);
+        p.printAgents(true, false);
     }
 
 }
