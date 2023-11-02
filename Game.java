@@ -13,11 +13,11 @@ public class Game {
             for (int i = 0; i < inputs.length; i++) {
                 double[] input = new double[]{inputs[i]};
                 double[] output = agent.act(input);
-                if (i == 0) {
+                if (i % 2 == 0) {
                     if (output[0] > 0.5) fitness++;
                     else fitness--;
                 } 
-                if (i == 1) {
+                if (i % 2 == 1) {
                     if (output[0] < 0.5) fitness++;
                     else fitness--;
                 } 
@@ -27,13 +27,16 @@ public class Game {
     }
 
     public void evolve() {
-        population.selectParentsByRank();
+        population.selectParentsByRank(2);
         population.crossoverPopulation();
         population.mutatePopulation();
     }
 
     public void start() {
-        double[] inputs = new double[]{0,1};
+        double[] inputs = new double[100];
+        for (int i = 0; i < 100; i++) {
+            inputs[i] = i;
+        }
         for (int i = 0; i < numIterations; i++) {
             act(inputs);
             population.sortAgentsByFitness();
@@ -46,7 +49,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(100000, 10, new int[]{1,1,1});
+        Game game = new Game(100000, 10, new int[]{1,4,4,1});
         game.start();
     }
 

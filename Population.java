@@ -19,9 +19,12 @@ public class Population {
         }
     }
 
-    public void selectParentsByRank() {
+    public void selectParentsByRank(int numElites) {
         sortAgentsByFitness();
         int populationSize = getPopulationSize();
+        if (numElites > populationSize) {
+            throw new IllegalArgumentException("Number of elites greater than size of population");
+        }
         double[] odds = new double[populationSize];
         double totalShares = populationSize;
         odds[populationSize-1] = populationSize;
@@ -34,7 +37,10 @@ public class Population {
         }
         RouletteSelector selector = new RouletteSelector(odds);
         Agent[] parents = new Agent[populationSize];
-        for (int i = 0; i < populationSize; i++) {
+        for (int i = 0; i < numElites; i++) {
+            parents[i] = this.agents[i];
+        }
+        for (int i = numElites; i < populationSize; i++) {
             int selected = selector.select();
             parents[i] = this.agents[selected].copy();
         }
@@ -103,7 +109,7 @@ public class Population {
         }
         p.sortAgentsByFitness();
         p.printAgents(true, false);
-        p.selectParentsByRank();
+        p.selectParentsByRank(2);
         p.crossoverPopulation();
         p.mutatePopulation();
         for (Agent a : p.getAgents()) {
