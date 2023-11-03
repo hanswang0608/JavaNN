@@ -48,9 +48,17 @@ public class Game {
         population.printAgents(true, true);
     }
 
+    public Agent getMostFit() {
+        return this.population.getAgents()[0];
+    }
+
     public static void main(String[] args) {
         Game game = new Game(10000, 10, new int[]{1,1,1});
         game.start();
-    }
 
+        Agent a = game.getMostFit();
+        for (int i = 1000000; i < 1000100; i++) {
+            System.out.println(i + ", " + Utils.formatDouble(a.act(new double[]{i})[0]));
+        }        
+    }
 }
