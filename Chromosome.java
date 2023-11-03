@@ -14,8 +14,7 @@ public class Chromosome {
     }
 
     public Chromosome(NeuralNetwork network) {
-        this.genes = new double[network.getNumParameters()];
-        setGenesFromNetwork(network);
+        this.genes = network.getParameters();
     }
 
     // return two children by crossover of two parents
@@ -97,31 +96,6 @@ public class Chromosome {
 
     public void setGenes(double[] genes) {
         this.genes = genes;
-    }
-
-    public void setGenesFromNetwork(NeuralNetwork network) {
-        if (this.genes.length != network.getNumParameters()) {
-            throw new IllegalArgumentException("Dimension of network does not match length of chromosome");
-        }
-        double[][] biases = network.getBiases();
-        double[][][] weights = network.getWeights();
-        int ind = 0;
-        
-        for (int i = 0; i < biases.length; i++) {
-            for (int j = 0; j < biases[i].length; j++) {
-                this.genes[ind] = biases[i][j];
-                ind++;
-            }
-        }
-
-        for (int i = 0; i < weights.length; i++) {
-            for (int j = 0; j < weights[i].length; j++) {
-                for (int k = 0; k < weights[i][j].length; k++) {
-                    this.genes[ind] = weights[i][j][k];
-                    ind++;
-                }
-            }
-        }
     }
 
     public String toString() {

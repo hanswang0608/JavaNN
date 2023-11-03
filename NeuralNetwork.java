@@ -1,3 +1,10 @@
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InaccessibleObjectException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class NeuralNetwork {
@@ -68,8 +75,7 @@ public class NeuralNetwork {
     }
 
     
-    public double[][] getBiasesFromChromosome(Chromosome chromosome) {
-        double[] genes = chromosome.getGenes();
+    public double[][] getBiasesFromParameters(double[] parameters) {
         int numLayers = getNumLayers();
         double[][] biases = new double[numLayers-1][];
         int ind = 0;
@@ -77,7 +83,7 @@ public class NeuralNetwork {
             int numNeurons = this.layers.get(i+1).getNumNeurons();
             biases[i] = new double[numNeurons];
             for (int j = 0; j < numNeurons; j++) {
-                biases[i][j] = genes[ind];
+                biases[i][j] = parameters[ind];
                 ind++;
             }
         }
@@ -93,8 +99,7 @@ public class NeuralNetwork {
         return numWeights;
     }
 
-    public double[][][] getWeightsFromChromosome(Chromosome chromosome) {
-        double[] genes = chromosome.getGenes();
+    public double[][][] getWeightsFromParameters(double[] parameters) {
         int numLayers = getNumLayers();
         double[][][] weights = new double[numLayers-1][][];
         int ind = getNumBiases();
@@ -104,7 +109,7 @@ public class NeuralNetwork {
             weights[i] = new double[numNeurons][numWeights];
             for (int j = 0; j < numNeurons; j++) {
                 for (int k = 0; k < numWeights; k++) {
-                    weights[i][j][k] = genes[ind];
+                    weights[i][j][k] = parameters[ind];
                     ind++;
                 }
             }
@@ -184,9 +189,38 @@ public class NeuralNetwork {
         return numParams;
     }
 
-    public void setParameters(Chromosome chromosome) {
-        setBiases(getBiasesFromChromosome(chromosome));
-        setWeights(getWeightsFromChromosome(chromosome));
+    // get parameters of the network flattened into an array.
+    // Ordering: Biases -> Weights, input to output, top to bottom.
+    // Input layer is ignored.
+    public double[] getParameters() {
+        int numParams = this.getNumParameters();
+        double[] params = new double[numParams];
+        double[][] biases = this.getBiases();
+        double[][][] weights = this.getWeights();
+        int ind = 0;
+        
+        for (int i = 0; i < biases.length; i++) {
+            for (int j = 0; j < biases[i].length; j++) {
+                params[ind] = biases[i][j];
+                ind++;
+            }
+        }
+
+        for (int i = 0; i < weights.length; i++) {
+            for (int j = 0; j < weights[i].length; j++) {
+                for (int k = 0; k < weights[i][j].length; k++) {
+                    params[ind] = weights[i][j][k];
+                    ind++;
+                }
+            }
+        }
+        
+        return params;
+    }
+
+    public void setParameters(double[] parameters) {
+        setBiases(getBiasesFromParameters(parameters));
+        setWeights(getWeightsFromParameters(parameters));
     }
 
     public void printNetworkProperties() {
@@ -228,6 +262,100 @@ public class NeuralNetwork {
         int numLayers = getNumLayers();
         for (int i = 1; i < numLayers; i++){
             this.layers.get(i).printWeights();
+        }
+    }
+
+    public void saveToFile(String filename, boolean overwrite) {
+        
+        try {
+            File file = new File(filename);
+            if (file.createNewFile()) {
+                System.out.println("Model saved: " + file.getName());
+            } else {
+                System.out.print("File " + "\"" + filename + "\"" + " already exists, ");
+                if (overwrite) {
+                    System.out.println("overwriting..");
+                } else {
+                    System.out.println("aborting.");
+                    return;
+                }
+            }
+
+            /*
+             * Structure of save file:
+             * NUM_LAYERS - int (4 bytes)
+             * ARCHITECTURE - [int] (NUM_LAYERS*4 bytes)
+             * BIASES/WEIGHTS - [double] (numParams*8 bytes)
+             */
+
+            FileOutputStream fos = new FileOutputStream(filename);
+            
+            int[] architecture = this.getArchitecture();
+            double[] parameters = this.getParameters();
+
+            int bufSize = 4 + architecture.length * 4 + parameters.length * 8;
+            byte[] buf = new byte[bufSize];
+            int bufInd = 0;
+
+            ByteBuffer.wrap(buf).putInt(architecture.length);
+            bufInd += 4;
+
+            for (int i = 0; i < architecture.length; i++) {
+                ByteBuffer.wrap(buf, bufInd, 4).putInt(architecture[i]);
+                bufInd += 4;
+            }
+
+            for (int i = 0; i < parameters.length; i++) {
+                ByteBuffer.wrap(buf, bufInd, 8).putDouble(parameters[i]);
+                bufInd += 8;
+            }
+            
+            fos.write(buf);
+            fos.close();
+        } catch (IOException e) {
+            System.out.println("Error occured while creating model save file.");
+            e.printStackTrace();
+        }
+    }
+
+    public static NeuralNetwork loadFromFile(String filename) throws IOException{
+        try {
+            FileInputStream fis = new FileInputStream(filename);
+            byte[] buf = fis.readAllBytes();
+            int bufInd = 0;
+            
+            NeuralNetwork network;
+            int numLayers;
+            int[] architecture;
+            int numParams;
+            double[] parameters;
+            
+            numLayers = ByteBuffer.wrap(buf, bufInd, 4).getInt();
+            bufInd += 4;
+            
+            architecture = new int[numLayers];
+            for (int i = 0; i < architecture.length; i++) {
+                architecture[i] = ByteBuffer.wrap(buf, bufInd, 4).getInt();
+                bufInd += 4;
+            }
+
+            numParams = getNumParameters(architecture);
+            parameters = new double[numParams];
+            for (int i = 0; i < parameters.length; i++) {
+                parameters[i] = ByteBuffer.wrap(buf, bufInd, 8).getDouble();
+                bufInd += 8;
+            }
+
+            network = new NeuralNetwork(architecture);
+            network.setParameters(parameters);
+
+            fis.close();
+            
+            return network;
+        } catch (IOException e) {
+            System.out.println("Error occured while loading model save file.");
+            e.printStackTrace();
+            throw e;
         }
     }
 

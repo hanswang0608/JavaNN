@@ -1,3 +1,5 @@
+import java.io.IOException;
+
 public class Game {
     private int numIterations;
     private Population population;
@@ -27,6 +29,7 @@ public class Game {
         population.selectParentsByRank(2);
         population.crossoverPopulation();
         population.mutatePopulation();
+        population.updatePopulation();
     }
 
     public void start() {
@@ -51,10 +54,19 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(10000, 10, new int[]{2,2,2,1});
-        game.start();
+        // Game game = new Game(1000, 10, new int[]{2,2,2,1,});
+        // game.start();
 
-        Agent a = game.getMostFit();
-        System.out.println(a.act(new double[]{1,1})[0]);
+        // Agent a = game.getMostFit();
+        // System.out.println(a.getID() + ", " + a.act(new double[]{1,1})[0]);
+        // a.getNetwork().saveToFile("models/test.model", true);
+
+        try {
+            Agent b = new Agent(NeuralNetwork.loadFromFile("models/test.model"));
+            System.out.println(b.getID() + ", " + b.act(new double[]{1,0})[0]);
+            System.out.println(b.getChromosome());
+        } catch (IOException e) {
+            System.out.println("failed");
+        }
     }
 }

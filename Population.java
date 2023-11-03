@@ -72,6 +72,14 @@ public class Population {
         }
     }
 
+    // update every agent's neural network with its chromosome
+    public void updatePopulation() {
+        int populationSize = getPopulationSize();
+        for (Agent agent : this.agents) {
+            agent.updateNetwork();
+        }
+    }
+
     public int getPopulationSize() {
         return this.agents.length;
     }
