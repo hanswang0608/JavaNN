@@ -12,18 +12,10 @@ public class Game {
             double fitness = 0;
             for (int i = 0; i < inputs.length; i++) {
                 double output = agent.act(inputs[i])[0];
-                // if (output > 0.5) {
-                //     if (i == 3) fitness++;
-                //     else fitness--;
-                // }
-                // if (output < 0.5) {
-                //     if (i < 3) fitness++;
-                //     else fitness--;
-                // }
-                if (i == 3) {
+                if (i == 1 || i == 2) {
                     fitness += output;
                 }
-                if (i < 3) {
+                else {
                     fitness -= output;
                 }
             }
@@ -59,7 +51,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(1000, 10, new int[]{2,2,2,1});
+        Game game = new Game(10000, 10, new int[]{2,2,2,1});
         game.start();
 
         Agent a = game.getMostFit();
