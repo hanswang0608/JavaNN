@@ -14,7 +14,7 @@ public class Game {
             double fitness = 0;
             for (int i = 0; i < inputs.length; i++) {
                 double output = agent.act(inputs[i])[0];
-                if (inputs[i][0] == Math.PI) {
+                if (i == 1 || i == 2) {
                     fitness += output;
                 } else {
                     fitness -= output;
@@ -32,11 +32,11 @@ public class Game {
     }
 
     public void start() {
-        double[][] inputs = new double[100][];
-        for (int i = 0; i < 100; i++) {
-            inputs[i] = new double[]{i/10};
-        }
-        inputs[0][0] = Math.PI;
+        double[][] inputs = new double[4][];
+        inputs[0] = new double[]{0,0};
+        inputs[1] = new double[]{0,1};
+        inputs[2] = new double[]{1,0};
+        inputs[3] = new double[]{1,1};
         for (int i = 0; i < numIterations; i++) {
             act(inputs);
             population.sortAgentsByFitness();
@@ -58,11 +58,11 @@ public class Game {
 
         // Agent a = game.getMostFit();
         // System.out.println(a.getID() + ", " + a.act(new double[]{1,1})[0]);
-        // a.getNetwork().saveToFile("models/test.model", true);
+        // a.getNetwork().saveToFile("models/XOR.model", true);
 
         try {
-            Agent b = new Agent(NeuralNetwork.loadFromFile("models/test.model"));
-            System.out.println(b.getID() + ", " + b.act(new double[]{1,0})[0]);
+            Agent b = new Agent(NeuralNetwork.loadFromFile("models/XOR.model"));
+            System.out.println(b.getID() + ", " + b.act(new double[]{1,1})[0]);
             System.out.println(b.getChromosome());
         } catch (IOException e) {
             System.out.println("failed");
