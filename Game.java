@@ -12,10 +12,9 @@ public class Game {
             double fitness = 0;
             for (int i = 0; i < inputs.length; i++) {
                 double output = agent.act(inputs[i])[0];
-                if (i == 1 || i == 2) {
+                if (inputs[i][0] == Math.PI) {
                     fitness += output;
-                }
-                else {
+                } else {
                     fitness -= output;
                 }
             }
@@ -30,11 +29,11 @@ public class Game {
     }
 
     public void start() {
-        double[][] inputs = new double[4][];
-        inputs[0] = new double[]{0,0};
-        inputs[1] = new double[]{0,1};
-        inputs[2] = new double[]{1,0};
-        inputs[3] = new double[]{1,1};
+        double[][] inputs = new double[100][];
+        for (int i = 0; i < 100; i++) {
+            inputs[i] = new double[]{i/10};
+        }
+        inputs[0][0] = Math.PI;
         for (int i = 0; i < numIterations; i++) {
             act(inputs);
             population.sortAgentsByFitness();
@@ -51,10 +50,13 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(10000, 10, new int[]{2,2,2,1});
+        Game game = new Game(10000, 10, new int[]{1,4,3,1});
         game.start();
 
         Agent a = game.getMostFit();
-        System.out.println(a.act(new double[]{1,1})[0]);
+        System.out.println(a.act(new double[]{Math.PI})[0]);
+        System.out.println(a.act(new double[]{3.2})[0]);
+        System.out.println(a.act(new double[]{3.5})[0]);
+        System.out.println(a.act(new double[]{1234})[0]);
     }
 }
