@@ -17,6 +17,15 @@ public class Agent implements Comparable<Agent>{
         agentsCount++;
     }
 
+    public Agent(NeuralNetwork network) {
+        this.fitness = 0;
+        this.network = network;
+        this.chromosome = new Chromosome(network);
+
+        this.id = agentsCount;
+        agentsCount++;
+    }
+
     public double[] act(double[] inputs) {
         return this.network.evaluate(inputs);
     }
@@ -34,7 +43,7 @@ public class Agent implements Comparable<Agent>{
     }
 
     public void updateNetwork() {
-        this.network.setParameters(chromosome);
+        this.network.setParameters(chromosome.getGenes());
     }
 
     public double[] getNetworkOutputs() {

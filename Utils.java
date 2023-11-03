@@ -1,3 +1,4 @@
+import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.util.Random;
 
@@ -39,5 +40,13 @@ public class Utils {
 
     public static boolean randBool(double probability) {
         return rand.nextDouble() <= probability;
+    }
+
+    public static byte[] intToByteArray(int x) {
+        return ByteBuffer.allocate(4).putInt(x).array();
+    }
+
+    public static int byteArrayToInt(byte[] bytes) {
+        return ByteBuffer.wrap(bytes).getInt();
     }
 }
