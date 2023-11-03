@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class NeuralNetwork {
     private ArrayList<Layer> layers;
 
-    private static final ActivationFunction.FuncTypes HIDDEN_LAYER_TYPE = ActivationFunction.FuncTypes.SIN;
+    private static final ActivationFunction.FuncTypes HIDDEN_LAYER_TYPE = ActivationFunction.FuncTypes.RELU;
     private static final ActivationFunction.FuncTypes OUTPUT_LAYER_TYPE = ActivationFunction.FuncTypes.SIGMOID;
 
     public NeuralNetwork(int[] architecture) {

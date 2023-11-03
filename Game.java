@@ -7,20 +7,25 @@ public class Game {
         this.population = new Population(populationSize, networkArchitecture);
     }
 
-    public void act(double[] inputs) {
+    public void act(double[][] inputs) {
         for (Agent agent : population.getAgents()) {
             double fitness = 0;
             for (int i = 0; i < inputs.length; i++) {
-                double[] input = new double[]{inputs[i]};
-                double[] output = agent.act(input);
-                if (i % 2 == 0) {
-                    if (output[0] > 0.5) fitness++;
-                    else fitness--;
-                } 
-                if (i % 2 == 1) {
-                    if (output[0] < 0.5) fitness++;
-                    else fitness--;
-                } 
+                double output = agent.act(inputs[i])[0];
+                // if (output > 0.5) {
+                //     if (i == 3) fitness++;
+                //     else fitness--;
+                // }
+                // if (output < 0.5) {
+                //     if (i < 3) fitness++;
+                //     else fitness--;
+                // }
+                if (i == 3) {
+                    fitness += output;
+                }
+                if (i < 3) {
+                    fitness -= output;
+                }
             }
             agent.setFitness(fitness);
         }
@@ -33,10 +38,11 @@ public class Game {
     }
 
     public void start() {
-        double[] inputs = new double[100];
-        for (int i = 0; i < 100; i++) {
-            inputs[i] = i;
-        }
+        double[][] inputs = new double[4][];
+        inputs[0] = new double[]{0,0};
+        inputs[1] = new double[]{0,1};
+        inputs[2] = new double[]{1,0};
+        inputs[3] = new double[]{1,1};
         for (int i = 0; i < numIterations; i++) {
             act(inputs);
             population.sortAgentsByFitness();
@@ -53,12 +59,10 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(10000, 10, new int[]{1,1,1});
+        Game game = new Game(1000, 10, new int[]{2,2,2,1});
         game.start();
 
         Agent a = game.getMostFit();
-        for (int i = 1000000; i < 1000100; i++) {
-            System.out.println(i + ", " + Utils.formatDouble(a.act(new double[]{i})[0]));
-        }        
+        System.out.println(a.act(new double[]{1,1})[0]);
     }
 }
