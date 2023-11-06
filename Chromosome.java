@@ -1,9 +1,9 @@
 public class Chromosome {
     private double[] genes;
 
-    private static final double PARAM_LOWER_LIMIT = -10;
-    private static final double PARAM_UPPER_LIMIT = 10;
-    private static final double WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT = 0.6;
+    private static final double GENE_LOWER_LIMIT = Config.GENE_LOWER_LIMIT;
+    private static final double GENE_UPPER_LIMIT = Config.GENE_UPPER_LIMIT;
+    private static final double WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT = Config.WHOLE_ARITHMETIC_CROSSOVER_COEFFICIENT;
     
     public Chromosome(int numGenes) {
         this.genes = new double[numGenes];
@@ -29,7 +29,7 @@ public class Chromosome {
     // randomize entire chromosome within range
     public void randomize() {
         for (int i = 0; i < this.genes.length; i++) {
-            this.genes[i] = Utils.randDouble(PARAM_LOWER_LIMIT, PARAM_UPPER_LIMIT);
+            this.genes[i] = Utils.randDouble(GENE_LOWER_LIMIT, GENE_UPPER_LIMIT);
         }
     }
 
@@ -75,14 +75,14 @@ public class Chromosome {
     public void uniformMutation(double probability) {
         for (int i = 0; i < this.genes.length; i++) {
             if (Utils.randBool(probability)) {
-                this.genes[i] = Utils.randDouble(PARAM_LOWER_LIMIT, PARAM_UPPER_LIMIT);
+                this.genes[i] = Utils.randDouble(GENE_LOWER_LIMIT, GENE_UPPER_LIMIT);
             }
         }
     }
 
     // add random noise to every gene
     public void gaussianMutation(double probability) {
-        double range = (PARAM_UPPER_LIMIT-PARAM_LOWER_LIMIT)/4;
+        double range = (GENE_UPPER_LIMIT-GENE_LOWER_LIMIT)/4;
         for (int i = 0; i < this.genes.length; i++) {
             if (Utils.randBool(probability)) {
                 this.genes[i] = clampToLimits(Utils.randGaussian(this.genes[i], range));
@@ -109,13 +109,13 @@ public class Chromosome {
     }
 
     public static double clampToLimits(double x) {
-        if (x > PARAM_UPPER_LIMIT) x = PARAM_UPPER_LIMIT;
-        if (x < PARAM_LOWER_LIMIT) x = PARAM_LOWER_LIMIT;
+        if (x > GENE_UPPER_LIMIT) x = GENE_UPPER_LIMIT;
+        if (x < GENE_LOWER_LIMIT) x = GENE_LOWER_LIMIT;
         return x;
     }
 
     public static double getDistanceToLimit(double x) {
-        return Math.min(Math.abs(PARAM_UPPER_LIMIT-x), Math.abs(PARAM_LOWER_LIMIT-x));
+        return Math.min(Math.abs(GENE_UPPER_LIMIT-x), Math.abs(GENE_LOWER_LIMIT-x));
     }
 
     public static void main(String[] args) {

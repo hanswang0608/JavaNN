@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class NeuralNetwork {
     private ArrayList<Layer> layers;
 
-    private static final ActivationFunction.FuncTypes HIDDEN_LAYER_TYPE = ActivationFunction.FuncTypes.RELU;
-    private static final ActivationFunction.FuncTypes OUTPUT_LAYER_TYPE = ActivationFunction.FuncTypes.SIGMOID;
+    private static final ActivationFunction.FuncTypes HIDDEN_LAYER_TYPE = Config.HIDDEN_LAYER_TYPE;
+    private static final ActivationFunction.FuncTypes OUTPUT_LAYER_TYPE = Config.OUTPUT_LAYER_TYPE;
 
     public NeuralNetwork(int[] architecture) {
         this.layers = new ArrayList<Layer>(architecture.length);

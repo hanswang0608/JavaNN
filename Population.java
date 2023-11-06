@@ -4,9 +4,9 @@ public class Population {
     private Agent[] agents;
     private int[] networkArchitecture;
     
-    private static final double CROSSOVER_PROBABILITY = 0.8;
-    private static final double MUTATION_PROBABILITY = 0.1;
-    private static final double GENE_MUTATION_PROBABILITY = 1.0;
+    private static final double CROSSOVER_PROBABILITY = Config.CROSSOVER_PROBABILITY;
+    private static final double MUTATION_PROBABILITY = Config.MUTATION_PROBABILITY;
+    private static final double GENE_MUTATION_PROBABILITY = Config.GENE_MUTATION_PROBABILITY;
 
     public Population(int populationSize, int[] networkArchitecture) {
         if (populationSize % 2 != 0) {
