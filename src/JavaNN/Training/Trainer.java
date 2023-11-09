@@ -1,4 +1,4 @@
-package src.Training;
+package JavaNN.Training;
 
 public class Trainer {
     private int numIterations;

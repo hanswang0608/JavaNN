@@ -1,4 +1,5 @@
-package src.Network;
+package JavaNN.Network;
+
 public class ActivationFunction {
     public enum FuncTypes {
         SIGMOID,

@@ -1,5 +1,5 @@
-package src.Training;
-import src.Util.Utils;
+package JavaNN.Training;
+import JavaNN.Util.Utils;
 
 public class RouletteSelector {
     private double[] roulette;

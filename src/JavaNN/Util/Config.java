@@ -1,5 +1,5 @@
-package src.Util;
-import src.Network.ActivationFunction;
+package JavaNN.Util;
+import JavaNN.Network.ActivationFunction;
 
 public class Config {
     /* GENETIC ALGORITHM PARAMETERS */

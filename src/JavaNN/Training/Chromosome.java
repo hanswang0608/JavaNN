@@ -1,7 +1,7 @@
-package src.Training;
-import src.Network.NeuralNetwork;
-import src.Util.Config;
-import src.Util.Utils;
+package JavaNN.Training;
+import JavaNN.Network.NeuralNetwork;
+import JavaNN.Util.Config;
+import JavaNN.Util.Utils;
 
 public class Chromosome {
     private double[] genes;

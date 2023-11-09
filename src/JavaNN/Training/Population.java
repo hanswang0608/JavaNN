@@ -1,8 +1,8 @@
-package src.Training;
+package JavaNN.Training;
 import java.util.Arrays;
 
-import src.Util.Config;
-import src.Util.Utils;
+import JavaNN.Util.Config;
+import JavaNN.Util.Utils;
 
 public class Population {
     private Agent[] agents;

@@ -1,6 +1,6 @@
-package src.Training;
-import src.Network.NeuralNetwork;
-import src.Util.Utils;
+package JavaNN.Training;
+import JavaNN.Network.NeuralNetwork;
+import JavaNN.Util.Utils;
 
 public class Agent implements Comparable<Agent>{
     private Chromosome chromosome;

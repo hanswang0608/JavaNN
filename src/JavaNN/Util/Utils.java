@@ -1,4 +1,4 @@
-package src.Util;
+package JavaNN.Util;
 import java.nio.ByteBuffer;
 import java.text.DecimalFormat;
 import java.util.Random;

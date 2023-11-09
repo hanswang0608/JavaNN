@@ -1,8 +1,7 @@
-package src.Network;
+package JavaNN.Network;
 import java.util.ArrayList;
 
-import src.Network.ActivationFunction.FuncTypes;
-import src.Util.Utils;
+import JavaNN.Util.Utils;
 
 public class Layer {
     private ArrayList<Double> biases;

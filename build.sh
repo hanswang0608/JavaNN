@@ -1,11 +1,8 @@
-echo --- Cleaning
-
-rm -f *.jar
-rm -f *.class
-rm -fr build
+#!/bin/sh
+./clean.sh
 
 echo --- Compiling Java
-javac src/*/*.java -d build
+javac src/*/*/*.java -d bin
 
 # echo --- Building Jar
 # jar cfe JavaNN.jar Trainer build/*.class

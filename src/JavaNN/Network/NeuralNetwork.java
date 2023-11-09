@@ -1,4 +1,4 @@
-package src.Network;
+package JavaNN.Network;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
-import src.Network.ActivationFunction.FuncTypes;
-import src.Util.Config;
+import JavaNN.Util.Config;
 
 public class NeuralNetwork {
     private ArrayList<Layer> layers;
