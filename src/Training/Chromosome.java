@@ -1,3 +1,8 @@
+package src.Training;
+import src.Network.NeuralNetwork;
+import src.Util.Config;
+import src.Util.Utils;
+
 public class Chromosome {
     private double[] genes;
 

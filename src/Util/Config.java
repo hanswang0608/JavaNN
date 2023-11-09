@@ -1,3 +1,6 @@
+package src.Util;
+import src.Network.ActivationFunction;
+
 public class Config {
     /* GENETIC ALGORITHM PARAMETERS */
 

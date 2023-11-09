@@ -1,3 +1,7 @@
+package src.Training;
+import src.Network.NeuralNetwork;
+import src.Util.Utils;
+
 public class Agent implements Comparable<Agent>{
     private Chromosome chromosome;
     private NeuralNetwork network;

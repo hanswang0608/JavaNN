@@ -1,3 +1,5 @@
+package src.Training;
+
 public class Trainer {
     private int numIterations;
     public Population population;

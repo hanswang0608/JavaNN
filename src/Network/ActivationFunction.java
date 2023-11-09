@@ -1,3 +1,4 @@
+package src.Network;
 public class ActivationFunction {
     public enum FuncTypes {
         SIGMOID,

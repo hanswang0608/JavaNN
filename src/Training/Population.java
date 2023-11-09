@@ -1,4 +1,8 @@
+package src.Training;
 import java.util.Arrays;
+
+import src.Util.Config;
+import src.Util.Utils;
 
 public class Population {
     private Agent[] agents;
