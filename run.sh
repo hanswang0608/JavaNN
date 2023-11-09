@@ -1,5 +1,8 @@
 #!/bin/sh
-./build.sh
+./clean.sh
+
+echo --- Compiling Java
+javac src/*/*/*.java -d bin
 
 echo "--- Running"
 

@@ -4,5 +4,6 @@
 echo --- Compiling Java
 javac src/*/*/*.java -d bin
 
-# echo --- Building Jar
-# jar cfe JavaNN.jar Trainer build/*.class
+echo --- Building Jar
+cd bin
+jar cfe ../JavaNN.jar JavaNN.Training.Trainer ./*/*/*.class
