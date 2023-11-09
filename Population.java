@@ -2,7 +2,8 @@ import java.util.Arrays;
 
 public class Population {
     private Agent[] agents;
-    private int[] networkArchitecture;
+    private boolean isSorted;
+
     
     private static final double CROSSOVER_PROBABILITY = Config.CROSSOVER_PROBABILITY;
     private static final double MUTATION_PROBABILITY = Config.MUTATION_PROBABILITY;
@@ -13,7 +14,7 @@ public class Population {
             throw new IllegalArgumentException("Population must be an even number");
         }
         this.agents = new Agent[populationSize];
-        this.networkArchitecture = networkArchitecture;
+        this.isSorted = false;
         for (int i = 0; i < populationSize; i++) {
             agents[i] = new Agent(networkArchitecture);
         }
@@ -45,10 +46,13 @@ public class Population {
             parents[i] = this.agents[selected].copy();
         }
         this.agents = parents;
+        isSorted = false;
     }
 
     public void sortAgentsByFitness() {
+        if (isSorted) return;
         Arrays.sort(agents);
+        isSorted = true;
     }
     
     public void crossoverPopulation() {
@@ -60,6 +64,7 @@ public class Population {
                 Chromosome.crossover(c1, c2);
             }
         }
+        isSorted = false;
     }
 
     public void mutatePopulation() {
@@ -70,11 +75,11 @@ public class Population {
                 Chromosome.mutate(c, GENE_MUTATION_PROBABILITY);
             }
         }
+        isSorted = false;
     }
 
     // update every agent's neural network with its chromosome
     public void updatePopulation() {
-        int populationSize = getPopulationSize();
         for (Agent agent : this.agents) {
             agent.updateNetwork();
         }
@@ -86,6 +91,11 @@ public class Population {
 
     public Agent[] getAgents() {
         return this.agents;
+    }
+
+    public Agent getMostFit() {
+        sortAgentsByFitness();
+        return agents[0];
     }
 
     public void printAgents(boolean showChromosome, boolean showOutputs) {

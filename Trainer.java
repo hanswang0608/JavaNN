@@ -1,10 +1,8 @@
-import java.io.IOException;
-
-public class Game {
+public class Trainer {
     private int numIterations;
-    private Population population;
+    public Population population;
 
-    public Game(int numIterations, int populationSize, int[] networkArchitecture) {
+    public Trainer(int numIterations, int populationSize, int[] networkArchitecture) {
         this.numIterations = numIterations;
         this.population = new Population(populationSize, networkArchitecture);
     }
@@ -48,15 +46,11 @@ public class Game {
         population.printAgents(true, true);
     }
 
-    public Agent getMostFit() {
-        return this.population.getAgents()[0];
-    }
-
     public static void main(String[] args) {
-        Game game = new Game(1000, 10, new int[]{2,2,2,1});
+        Trainer game = new Trainer(1000, 10, new int[]{2,2,2,1});
         game.start();
 
-        Agent a = game.getMostFit();
+        Agent a = game.population.getMostFit();
         System.out.println(a.getID() + ", " + a.act(new double[]{1,1})[0]);
         // a.getNetwork().saveToFile("models/XOR.model", true);
 
